@@ -7,6 +7,7 @@ import { Button } from "@mui/material";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
 import { useFormik } from "formik";
+import { Signup } from "../../validation";
 
 const Registration = () => {
   const [showPass, setShowPass] = useState("password");
@@ -24,6 +25,7 @@ const Registration = () => {
 
   const formik = useFormik({
     initialValues: initialValues,
+    validationSchema: Signup,
     onSubmit: () => {
       console.log("data geche");
     },
