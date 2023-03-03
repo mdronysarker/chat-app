@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+ol,
+ul {
+  list-style-type: none;
+}
+
+:root {
+  --title-color: #11175d;
+  --black: #000000;
+  --primary-color: #5f35f5;
+  --secondary-color: #03014c;
+  --red-orange: #ea6c00;
+  --error: #cd0404;
+  --primary-font: "Poppins", sans-serif;
+  --secondary-font: "Open Sans", sans-serif;
+  --rare-font: "Nunito", sans-serif;
+}

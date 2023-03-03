@@ -1,7 +1,9 @@
+import Registration from "./pages/Registration";
+
 function App() {
   return (
     <>
-      <h1>hii</h1>
+      <Registration />
     </>
   );
 }
