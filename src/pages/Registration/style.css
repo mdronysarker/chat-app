@@ -41,3 +41,7 @@
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+.signup_image img {
+  width: 100%;
+}

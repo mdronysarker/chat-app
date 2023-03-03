@@ -107,7 +107,11 @@ const Registration = () => {
             </div>
           </Grid>
           <Grid item xs={6}>
-            <h2>hlw</h2>
+            <div className="signup_image">
+              <picture>
+                <img src="./images/Sign up-rafiki.png" alt="signup-img" />
+              </picture>
+            </div>
           </Grid>
         </Grid>
       </Container>
