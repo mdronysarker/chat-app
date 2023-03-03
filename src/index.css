@@ -23,3 +23,19 @@ ul {
   --secondary-font: "Open Sans", sans-serif;
   --rare-font: "Nunito", sans-serif;
 }
+
+.box {
+  align-items: center !important;
+  height: 100vh;
+}
+
+.input-design {
+  width: 60%;
+  margin-bottom: 15px !important;
+}
+
+.button {
+  width: 60% !important;
+  padding: 10px 10px !important;
+  border-radius: 50px !important;
+}

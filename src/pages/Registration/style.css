@@ -1,0 +1,43 @@
+.reg-header {
+  margin-bottom: 34px;
+}
+
+.reg-header h2 {
+  font-family: var(--rare-font);
+  color: var(--title-color);
+  font-size: 34px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.reg-header p {
+  font-family: var(--rare-font);
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.links {
+  text-align: center;
+  width: 60%;
+}
+
+.links p {
+  font-family: var(--secondary-font);
+  font-size: 13px;
+  color: var(--secondary-color);
+  margin-top: 25px;
+  font-weight: 700;
+}
+
+.password {
+  position: relative;
+}
+
+.eyes {
+  position: absolute;
+  top: 40%;
+  right: 45%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
