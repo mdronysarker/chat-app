@@ -6,6 +6,7 @@ import "./style.css";
 import { Button } from "@mui/material";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
+import { useFormik } from "formik";
 
 const Registration = () => {
   const [showPass, setShowPass] = useState("password");
@@ -13,6 +14,21 @@ const Registration = () => {
   const handleShowPass = () => {
     showPass === "password" ? setShowPass("text") : setShowPass("password");
   };
+
+  const initialValues = {
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: () => {
+      console.log("data geche");
+    },
+  });
+  console.log(formik);
 
   return (
     <>
@@ -25,7 +41,7 @@ const Registration = () => {
                 <p>Free register and you can enjoy it</p>
               </div>
               <div className="input-forms">
-                <form>
+                <form onSubmit={formik.handleSubmit}>
                   <TextField
                     sx={{
                       "& .MuiOutlinedInput-root.Mui-focused": {
@@ -41,6 +57,9 @@ const Registration = () => {
                     label="Full Name"
                     variant="outlined"
                     type={"text"}
+                    name="fullName"
+                    onChange={formik.handleChange}
+                    value={formik.values.fullName}
                   />
                   <TextField
                     sx={{
@@ -57,6 +76,9 @@ const Registration = () => {
                     label="Email"
                     variant="outlined"
                     type={"email"}
+                    name="Email"
+                    onChange={formik.handleChange}
+                    value={formik.values.email}
                   />
                   <div className="password">
                     <TextField
@@ -74,6 +96,9 @@ const Registration = () => {
                       label="Password"
                       variant="outlined"
                       type={showPass}
+                      name="password"
+                      onChange={formik.handleChange}
+                      value={formik.values.password}
                     />
                     <div className="eyes" onClick={handleShowPass}>
                       {showPass === "password" ? <TbEye /> : <TbEyeOff />}
@@ -95,8 +120,11 @@ const Registration = () => {
                     label="Confrim Password"
                     variant="outlined"
                     type={"password"}
+                    name="confrimPassword"
+                    onChange={formik.handleChange}
+                    value={formik.values.confirmPassword}
                   />
-                  <Button className="button" variant="contained">
+                  <Button type="submit" className="button" variant="contained">
                     Sign Up
                   </Button>
                 </form>
