@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Container from "@mui/material/Container";
+import DotLoader from "react-spinners/DotLoader";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import "./style.css";
@@ -12,6 +13,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Registration = () => {
   const [showPass, setShowPass] = useState("password");
+  const [loading, setLoading] = useState(false);
 
   const handleShowPass = () => {
     showPass === "password" ? setShowPass("text") : setShowPass("password");
@@ -30,6 +32,7 @@ const Registration = () => {
     initialValues: initialValues,
     validationSchema: Signup,
     onSubmit: () => {
+      setLoading(true);
       createUserWithEmailAndPassword(
         auth,
         formik.values.email,
@@ -37,6 +40,8 @@ const Registration = () => {
       )
         .then(() => {
           console.log("data geche");
+          setLoading(false);
+          formik.resetForm();
         })
         .catch((error) => {
           console.log(error.code);
@@ -161,9 +166,23 @@ const Registration = () => {
                     ""
                   )}
 
-                  <Button type="submit" className="button" variant="contained">
-                    Sign Up
-                  </Button>
+                  {loading ? (
+                    <Button
+                      type="submit"
+                      className="button"
+                      variant="contained"
+                    >
+                      <DotLoader size={"30px"} />
+                    </Button>
+                  ) : (
+                    <Button
+                      type="submit"
+                      className="button"
+                      variant="contained"
+                    >
+                      Sign Up
+                    </Button>
+                  )}
                 </form>
                 <div className="links">
                   <p>Already have an account ? Sign In</p>
