@@ -63,6 +63,11 @@ const Registration = () => {
                     onChange={formik.handleChange}
                     value={formik.values.fullName}
                   />
+                  {formik.errors.fullName && formik.touched.fullName ? (
+                    <p className="errors">{formik.errors.fullName}</p>
+                  ) : (
+                    ""
+                  )}
                   <TextField
                     sx={{
                       "& .MuiOutlinedInput-root.Mui-focused": {
@@ -82,6 +87,11 @@ const Registration = () => {
                     onChange={formik.handleChange}
                     value={formik.values.email}
                   />
+                  {formik.errors.email && formik.touched.email ? (
+                    <p className="errors">{formik.errors.email}</p>
+                  ) : (
+                    ""
+                  )}
                   <div className="password">
                     <TextField
                       sx={{
@@ -106,6 +116,11 @@ const Registration = () => {
                       {showPass === "password" ? <TbEye /> : <TbEyeOff />}
                     </div>
                   </div>
+                  {formik.errors.password && formik.touched.password ? (
+                    <p className="errors">{formik.errors.password}</p>
+                  ) : (
+                    ""
+                  )}
 
                   <TextField
                     sx={{
@@ -126,6 +141,13 @@ const Registration = () => {
                     onChange={formik.handleChange}
                     value={formik.values.confirmPassword}
                   />
+                  {formik.errors.confirmPassword &&
+                  formik.touched.confirmPassword ? (
+                    <p className="errors">{formik.errors.confirmPassword}</p>
+                  ) : (
+                    ""
+                  )}
+
                   <Button type="submit" className="button" variant="contained">
                     Sign Up
                   </Button>
