@@ -9,7 +9,13 @@ import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
 import { useFormik } from "formik";
 import { Signup } from "../../validation";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { ToastContainer, toast } from "react-toastify";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
   const [showPass, setShowPass] = useState("password");
@@ -27,6 +33,7 @@ const Registration = () => {
   };
 
   const auth = getAuth();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -39,9 +46,19 @@ const Registration = () => {
         formik.values.password
       )
         .then(() => {
-          console.log("data geche");
-          setLoading(false);
+          sendEmailVerification(auth.currentUser);
+          toast.success("Registration done, Please cheek your email", {
+            position: "bottom-center",
+            autoClose: 1500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+          });
           formik.resetForm();
+          setLoading(false);
+          setTimeout(() => {
+            navigate("/login");
+          }, 1600);
         })
         .catch((error) => {
           console.log(error.code);
@@ -53,6 +70,7 @@ const Registration = () => {
   return (
     <>
       <Container fixed>
+        <ToastContainer />
         <Grid className="box" container spacing={6}>
           <Grid item xs={6}>
             <div className="forms">
