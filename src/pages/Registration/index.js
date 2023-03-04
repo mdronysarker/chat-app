@@ -15,7 +15,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Registration = () => {
   const [showPass, setShowPass] = useState("password");
@@ -203,7 +203,9 @@ const Registration = () => {
                   )}
                 </form>
                 <div className="links">
-                  <p>Already have an account ? Sign In</p>
+                  <p>
+                    Already have an account ? <Link to="/login">Sign In</Link>
+                  </p>
                 </div>
               </div>
             </div>

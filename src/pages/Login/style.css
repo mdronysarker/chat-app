@@ -1,0 +1,95 @@
+.login-header {
+  width: 60%;
+}
+
+.login-header h2 {
+  font-family: var(--rare-font);
+  color: var(--title-color);
+  font-weight: 700;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.links {
+  text-align: center;
+  width: 60%;
+}
+
+.links p a {
+  color: var(--red-orange);
+}
+
+.avatar {
+  text-align: center;
+}
+
+.avatar img {
+  width: 80px;
+}
+
+.flex {
+  display: flex;
+  width: 60% !important;
+}
+
+.authentication {
+  border: 1px solid var(--secondary-color);
+  margin-top: 28px;
+  margin-bottom: 32px;
+  padding: 10px 7px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.auth_text {
+  margin-left: 12px;
+}
+
+.auth_text p {
+  font-family: var(--secondary-font);
+  color: var(--secondary-color);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.auth_pic img {
+  width: 50%;
+}
+
+.authentication_fb {
+  border: 1px solid var(--secondary-color);
+  margin-top: 28px;
+  margin-left: 5px;
+  margin-bottom: 32px;
+  padding: 10px 7px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fb_text {
+  margin-left: 2px;
+}
+
+.fb_text p {
+  font-family: var(--secondary-font);
+  color: var(--secondary-color);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fb_pic img {
+  width: 80%;
+}
+
+.forgot {
+  margin-top: 15px;
+  display: inline-block;
+}
+
+.forgot a:hover {
+  text-decoration: underline;
+}
