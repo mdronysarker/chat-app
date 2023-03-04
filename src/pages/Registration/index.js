@@ -8,6 +8,7 @@ import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
 import { useFormik } from "formik";
 import { Signup } from "../../validation";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const Registration = () => {
   const [showPass, setShowPass] = useState("password");
@@ -23,14 +24,26 @@ const Registration = () => {
     confirmPassword: "",
   };
 
+  const auth = getAuth();
+
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: Signup,
     onSubmit: () => {
-      console.log("data geche");
+      createUserWithEmailAndPassword(
+        auth,
+        formik.values.email,
+        formik.values.password
+      )
+        .then(() => {
+          console.log("data geche");
+        })
+        .catch((error) => {
+          console.log(error.code);
+        });
     },
   });
-  console.log(formik);
+  // console.log(formik);
 
   return (
     <>
@@ -83,7 +96,7 @@ const Registration = () => {
                     label="Email"
                     variant="outlined"
                     type={"email"}
-                    name="Email"
+                    name="email"
                     onChange={formik.handleChange}
                     value={formik.values.email}
                   />
@@ -137,7 +150,7 @@ const Registration = () => {
                     label="Confrim Password"
                     variant="outlined"
                     type={"password"}
-                    name="confrimPassword"
+                    name="confirmPassword"
                     onChange={formik.handleChange}
                     value={formik.values.confirmPassword}
                   />
