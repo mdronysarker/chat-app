@@ -9,6 +9,7 @@ import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 import { Signin } from "../../validation";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -46,14 +47,33 @@ const Login = () => {
           }, 1600);
         })
         .catch((error) => {
-          console.log(error.code);
+          if (error.code.includes("auth/user-not-found"))
+            toast.success("Invalid Email", {
+              position: "bottom-center",
+              autoClose: 1500,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: false,
+            });
+
+          if (error.code.includes("auth/wrong-password"))
+            toast.success("Password Incorrect", {
+              position: "bottom-center",
+              autoClose: 1500,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: false,
+            });
+
           setLoading(false);
         });
     },
   });
+
   return (
     <>
       <Container fixed>
+        <ToastContainer />
         <Grid className="box" container spacing={6}>
           <Grid item xs={6}>
             <div className="signup_image">
