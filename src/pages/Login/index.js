@@ -11,7 +11,12 @@ import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Signin } from "../../validation";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 const Login = () => {
   const [showPass, setShowPass] = useState("password");
@@ -28,6 +33,7 @@ const Login = () => {
 
   const auth = getAuth();
   const navigate = useNavigate();
+  const provider = new GoogleAuthProvider();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -70,6 +76,16 @@ const Login = () => {
     },
   });
 
+  const handelGoogleauth = () => {
+    signInWithPopup(auth, provider)
+      .then(() => {
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.log(error.code);
+      });
+  };
+
   return (
     <>
       <Container fixed>
@@ -93,7 +109,7 @@ const Login = () => {
                 <h2>Login to your account!</h2>
               </div>
               <div className="flex">
-                <div className="authentication">
+                <div className="authentication" onClick={handelGoogleauth}>
                   <div className="auth_pic">
                     <picture>
                       <img src="./images/google.png" alt="" />
