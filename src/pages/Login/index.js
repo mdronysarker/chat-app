@@ -16,6 +16,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  FacebookAuthProvider,
 } from "firebase/auth";
 
 const Login = () => {
@@ -33,7 +34,8 @@ const Login = () => {
 
   const auth = getAuth();
   const navigate = useNavigate();
-  const provider = new GoogleAuthProvider();
+  const googleprovider = new GoogleAuthProvider();
+  const fbprovider = new FacebookAuthProvider();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -77,9 +79,23 @@ const Login = () => {
   });
 
   const handelGoogleauth = () => {
-    signInWithPopup(auth, provider)
+    signInWithPopup(auth, googleprovider)
       .then(() => {
-        navigate("/home");
+        setTimeout(() => {
+          navigate("/home");
+        }, 1600);
+      })
+      .catch((error) => {
+        console.log(error.code);
+      });
+  };
+
+  const handleFacebookauth = () => {
+    signInWithPopup(auth, fbprovider)
+      .then(() => {
+        setTimeout(() => {
+          navigate("/home");
+        }, 1600);
       })
       .catch((error) => {
         console.log(error.code);
@@ -119,7 +135,7 @@ const Login = () => {
                     <p>Login with Google</p>
                   </div>
                 </div>
-                <div className="authentication_fb">
+                <div className="authentication_fb" onClick={handleFacebookauth}>
                   <div className="fb_pic">
                     <picture>
                       <img src="./images/facebook.png" alt="" />
