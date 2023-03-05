@@ -8,8 +8,9 @@ import { Button } from "@mui/material";
 import { TbEye } from "react-icons/tb";
 import { TbEyeOff } from "react-icons/tb";
 import { useFormik } from "formik";
-import { Signup } from "../../validation";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Signin } from "../../validation";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
   const [showPass, setShowPass] = useState("password");
@@ -24,13 +25,31 @@ const Login = () => {
     password: "",
   };
 
-  //   const auth = getAuth();
-  //   const navigate = useNavigate();
+  const auth = getAuth();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: initialValues,
-    validationSchema: Signup,
-    onSubmit: () => {},
+    validationSchema: Signin,
+    onSubmit: () => {
+      setLoading(true);
+      signInWithEmailAndPassword(
+        auth,
+        formik.values.email,
+        formik.values.password
+      )
+        .then(() => {
+          formik.resetForm();
+          setLoading(false);
+          setTimeout(() => {
+            navigate("/home");
+          }, 1600);
+        })
+        .catch((error) => {
+          console.log(error.code);
+          setLoading(false);
+        });
+    },
   });
   return (
     <>
@@ -137,7 +156,7 @@ const Login = () => {
                   {loading ? (
                     <Button
                       type="submit"
-                      className="battons"
+                      className="button"
                       variant="contained"
                     >
                       <DotLoader size={"30px"}></DotLoader>

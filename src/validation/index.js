@@ -15,3 +15,12 @@ export const Signup = Yup.object({
     .oneOf([Yup.ref("password"), null], "password must be match")
     .required("please fill up the confrim Password"),
 });
+
+export const Signin = Yup.object({
+  email: Yup.string()
+    .email("Invalid email")
+    .required("please fill up the email"),
+  password: Yup.string()
+    .min(8, "Too short")
+    .required("please fill up the password"),
+});
