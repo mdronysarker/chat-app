@@ -18,6 +18,8 @@ import {
   GoogleAuthProvider,
   FacebookAuthProvider,
 } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { LoginUser } from "../../features/Slice/LoginSlice";
 
 const Login = () => {
   const [showPass, setShowPass] = useState("password");
@@ -36,6 +38,7 @@ const Login = () => {
   const navigate = useNavigate();
   const googleprovider = new GoogleAuthProvider();
   const fbprovider = new FacebookAuthProvider();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -47,7 +50,9 @@ const Login = () => {
         formik.values.email,
         formik.values.password
       )
-        .then(() => {
+        .then(({ user }) => {
+          dispatch(LoginUser(user));
+          localStorage.setItem("users", JSON.stringify(user));
           formik.resetForm();
           setLoading(false);
           setTimeout(() => {
