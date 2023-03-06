@@ -56,7 +56,7 @@ const Login = () => {
           formik.resetForm();
           setLoading(false);
           setTimeout(() => {
-            navigate("/home");
+            navigate("/");
           }, 1600);
         })
         .catch((error) => {
@@ -87,7 +87,7 @@ const Login = () => {
     signInWithPopup(auth, googleprovider)
       .then(() => {
         setTimeout(() => {
-          navigate("/home");
+          navigate("/");
         }, 1600);
       })
       .catch((error) => {
@@ -99,7 +99,7 @@ const Login = () => {
     signInWithPopup(auth, fbprovider)
       .then(() => {
         setTimeout(() => {
-          navigate("/home");
+          navigate("/");
         }, 1600);
       })
       .catch((error) => {
@@ -230,7 +230,8 @@ const Login = () => {
                 </form>
                 <div className="links">
                   <p>
-                    Don't have an account ? <Link to="/">sign up</Link>
+                    Don't have an account ?{" "}
+                    <Link to="/registration">sign up</Link>
                   </p>
                 </div>
               </div>

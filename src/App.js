@@ -7,17 +7,24 @@ import {
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
+import Loggedinuser from "./Privaterouter/Loggedin";
+import Notloggedinuser from "./Privaterouter/Notloggedin";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route path="/" element={<Registration />}></Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
+        <Route element={<Loggedinuser />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+        <Route element={<Notloggedinuser />}>
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
       </Route>
     )
   );
+
   return (
     <>
       <RouterProvider router={router} />
