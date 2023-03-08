@@ -85,7 +85,9 @@ const Login = () => {
 
   const handelGoogleauth = () => {
     signInWithPopup(auth, googleprovider)
-      .then(() => {
+      .then(({ user }) => {
+        dispatch(LoginUser(user));
+        localStorage.setItem("users", JSON.stringify(user));
         setTimeout(() => {
           navigate("/");
         }, 1600);
@@ -97,7 +99,9 @@ const Login = () => {
 
   const handleFacebookauth = () => {
     signInWithPopup(auth, fbprovider)
-      .then(() => {
+      .then(({ user }) => {
+        dispatch(LoginUser(user));
+        localStorage.setItem("users", JSON.stringify(user));
         setTimeout(() => {
           navigate("/");
         }, 1600);

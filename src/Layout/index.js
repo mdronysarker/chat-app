@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import { Outlet } from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 const Rootlayout = () => {
   return (
@@ -8,7 +9,7 @@ const Rootlayout = () => {
       <div>
         <Grid container spacing={2}>
           <Grid item xs={1}>
-            hii
+            <Sidebar />
           </Grid>
           <Grid item xs={11}>
             <Outlet />
