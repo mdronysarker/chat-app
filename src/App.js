@@ -4,6 +4,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import Rootlayout from "./Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
@@ -15,7 +16,9 @@ function App() {
     createRoutesFromElements(
       <Route>
         <Route element={<Loggedinuser />}>
-          <Route path="/" element={<Home />} />
+          <Route element={<Rootlayout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
         </Route>
         <Route element={<Notloggedinuser />}>
           <Route path="/registration" element={<Registration />} />
