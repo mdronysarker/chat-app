@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Rootlayout from "./Layout";
+import Forget from "./pages/Forgotpassword";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
@@ -23,6 +24,7 @@ function App() {
         <Route element={<Notloggedinuser />}>
           <Route path="/registration" element={<Registration />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot" element={<Forget />} />
         </Route>
       </Route>
     )

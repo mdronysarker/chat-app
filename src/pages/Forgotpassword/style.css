@@ -1,0 +1,19 @@
+.main_forget_wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner_forgot_box {
+  width: 600px;
+  padding: 20px 30px;
+  background-color: #f9f9ff;
+  border-radius: 15px;
+}
+
+.forget-header h4 {
+  font-size: 25px;
+  color: var(--secondary-color);
+  font-weight: 500;
+}

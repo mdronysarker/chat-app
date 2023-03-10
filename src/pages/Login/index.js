@@ -233,8 +233,11 @@ const Login = () => {
                   )}
                 </form>
                 <div className="links">
+                  <div className="forgot">
+                    <Link to={"/forgot"}>Forgot Password</Link>
+                  </div>
                   <p>
-                    Don't have an account ?{" "}
+                    Don't have an account ?
                     <Link to="/registration">sign up</Link>
                   </p>
                 </div>
