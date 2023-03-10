@@ -14,7 +14,9 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 import { Link, useNavigate } from "react-router-dom";
 
 const Registration = () => {
@@ -34,6 +36,7 @@ const Registration = () => {
 
   const auth = getAuth();
   const navigate = useNavigate();
+  const db = getDatabase();
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -44,25 +47,40 @@ const Registration = () => {
         auth,
         formik.values.email,
         formik.values.password
-      )
-        .then(() => {
-          sendEmailVerification(auth.currentUser);
-          toast.success("Registration done, Please cheek your email", {
-            position: "bottom-center",
-            autoClose: 1500,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: false,
-          });
-          formik.resetForm();
-          setLoading(false);
-          setTimeout(() => {
-            navigate("/login");
-          }, 1600);
+      ).then(({ user }) => {
+        // console.log(user);
+        updateProfile(auth.currentUser, {
+          displayName: formik.values.fullName,
         })
-        .catch((error) => {
-          console.log(error.code);
-        });
+          .then(() => {
+            sendEmailVerification(auth.currentUser)
+              .then(() => {
+                set(ref(db, "users/" + user.uid), {
+                  username: user.displayName,
+                  email: user.email,
+                });
+              })
+              .then(() => {
+                toast.success("Registration done. Please cheek your email", {
+                  position: "bottom-center",
+                  autoClose: 1500,
+                  hideProgressBar: true,
+                  closeOnClick: true,
+                  pauseOnHover: false,
+                });
+              });
+
+            formik.resetForm();
+            setLoading(false);
+            setTimeout(() => {
+              navigate("/login");
+            }, 1600);
+          })
+          .catch((error) => {
+            console.log(error.code);
+            setLoading(false);
+          });
+      });
     },
   });
   // console.log(formik);
