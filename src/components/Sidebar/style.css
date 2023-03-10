@@ -88,3 +88,11 @@
 .logout svg path {
   fill: #fff;
 }
+
+.user_name {
+  text-align: center;
+  font-family: var(--priamry-font);
+  color: #fff;
+  font-weight: 400;
+  margin-top: 20px;
+}

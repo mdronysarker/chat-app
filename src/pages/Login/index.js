@@ -51,13 +51,18 @@ const Login = () => {
         formik.values.password
       )
         .then(({ user }) => {
-          dispatch(LoginUser(user));
-          localStorage.setItem("users", JSON.stringify(user));
-          formik.resetForm();
-          setLoading(false);
-          setTimeout(() => {
-            navigate("/");
-          }, 1600);
+          // console.log(user);
+          if (user.emailVerified) {
+            dispatch(LoginUser(user));
+            localStorage.setItem("users", JSON.stringify(user));
+            formik.resetForm();
+            setLoading(false);
+            setTimeout(() => {
+              navigate("/");
+            }, 1600);
+          } else {
+            setLoading(false);
+          }
         })
         .catch((error) => {
           if (error.code.includes("auth/user-not-found"))
