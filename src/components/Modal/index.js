@@ -4,8 +4,11 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import "./style.css";
+import Uploadpicture from "../Uploadprofilepicture";
 
 const Popup = ({ open, setOpen }) => {
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       <div>
@@ -13,7 +16,7 @@ const Popup = ({ open, setOpen }) => {
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
           open={open}
-          // onClose={handleClose}
+          onClose={handleClose}
           closeAfterTransition
           slots={{ backdrop: Backdrop }}
           slotProps={{
@@ -24,8 +27,7 @@ const Popup = ({ open, setOpen }) => {
         >
           <Fade in={open}>
             <Box className="box_modal">
-              Text in a modal Duis mollis, est non commodo luctus, nisi erat
-              porttitor ligula.
+              <Uploadpicture setOpen={setOpen} />
             </Box>
           </Fade>
         </Modal>

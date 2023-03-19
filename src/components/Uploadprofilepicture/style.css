@@ -1,0 +1,14 @@
+.upload_box {
+  width: 100%;
+  background-color: #f0f0f0;
+  height: 370px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload {
+  text-align: center;
+}
