@@ -12,3 +12,20 @@
 .upload {
   text-align: center;
 }
+
+.upload_icon {
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 15px;
+}
+
+.upload_icon svg {
+  width: 25px;
+  height: 25px;
+}
