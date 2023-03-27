@@ -15,6 +15,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const auth = getAuth();
   const users = useSelector((user) => user.login.loggedIn);
+  // console.log(users);
 
   const handleLogout = () => {
     signOut(auth)
@@ -37,7 +38,13 @@ const Sidebar = () => {
           <div className="profile_details">
             <div className="profile-pic" onClick={handleOpen}>
               <picture>
-                <img src="./images/profile-pic.jpg" alt="" />
+                <img
+                  src={users.photoURL || "./images/profile-pic.jpg"}
+                  onError={(e) => {
+                    e.target.src = "./images/profile-pic.jpg";
+                  }}
+                  alt=""
+                />
               </picture>
               <div className="profile_overlay">
                 <AiOutlineCloudUpload />
