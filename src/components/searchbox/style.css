@@ -1,0 +1,34 @@
+.search_wrapper {
+  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 6%);
+  padding: 12px 20px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.search_icon {
+  width: 6%;
+  height: 21px;
+}
+
+.search_icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.search_fields {
+  width: 94%;
+  padding-left: 8px;
+}
+
+.search_fields input {
+  width: 100%;
+  outline: none;
+  border: none;
+  font-family: var(--primary-font);
+  font-size: 15px;
+  font-weight: 400;
+}

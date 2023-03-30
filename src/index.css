@@ -24,6 +24,10 @@ ul {
   --rare-font: "Nunito", sans-serif;
 }
 
+.body {
+  background-color: #f9f9f9;
+}
+
 .box {
   align-items: center !important;
   height: 100vh;
