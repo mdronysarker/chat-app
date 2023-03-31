@@ -7,6 +7,7 @@ import Friendrequest from "../../components/friendrequest";
 import Friend from "../../components/friends";
 import Mygroups from "../../components/mygroups";
 import Userlists from "../../components/userlist";
+import Blockusers from "../../components/blockuser";
 const Home = () => {
   return (
     <>
@@ -31,7 +32,12 @@ const Home = () => {
           </div>
         </Grid>
         <Grid item xs={4} className="home_items">
-          <Userlists />
+          <div>
+            <Userlists />
+          </div>
+          <div>
+            <Blockusers />
+          </div>
         </Grid>
       </Grid>
     </>
