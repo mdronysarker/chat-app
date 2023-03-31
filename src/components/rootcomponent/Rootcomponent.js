@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-const Rootcomponent = ({ images, name }) => {
+const Rootcomponent = ({ images, name, button }) => {
   console.log(images);
   return (
     <>
@@ -12,6 +12,11 @@ const Rootcomponent = ({ images, name }) => {
         <div className="root-names">
           <h5>{name}</h5>
         </div>
+        {button && (
+          <div className="root-btn">
+            <button type="button">{button}</button>
+          </div>
+        )}
       </div>
     </>
   );

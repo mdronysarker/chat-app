@@ -1,27 +1,27 @@
-export const Mygroupsdata = [
+export const Usersdata = [
   {
     image: "/images/profile-pic.jpg",
     name: "rony",
-    button: undefined,
+    button: "Sent Request",
   },
   {
     image: "/images/profile-pic.jpg",
     name: "siyamul",
-    button: undefined,
+    button: "Sent Request",
   },
   {
     image: "/images/profile-pic.jpg",
     name: "Akram",
-    button: undefined,
+    button: "Sent Request",
   },
   {
     image: "/images/profile-pic.jpg",
     name: "Jahid",
-    button: undefined,
+    button: "Sent Request",
   },
   {
     image: "/images/profile-pic.jpg",
     name: "Moni",
-    button: undefined,
+    button: "Sent Request",
   },
 ];

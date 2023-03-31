@@ -1,16 +1,16 @@
 import React from "react";
 import "./style.css";
 import Rootcomponent from "../rootcomponent/Rootcomponent";
-import { Mygroupsdata } from "./data";
+import { Usersdata } from "./data";
 
-const Mygroups = () => {
+const Userlists = () => {
   return (
     <>
-      <div className="mygroups">
-        <div className="mygroups_header">
-          <h4>My Group</h4>
+      <div className="userlists">
+        <div className="userlists_header">
+          <h4>User List</h4>
         </div>
-        {Mygroupsdata.map((item, i) => (
+        {Usersdata.map((item, i) => (
           <Rootcomponent
             key={i}
             images={item.image}
@@ -23,4 +23,4 @@ const Mygroups = () => {
   );
 };
 
-export default Mygroups;
+export default Userlists;
