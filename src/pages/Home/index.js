@@ -3,6 +3,8 @@ import Grid from "@mui/material/Grid";
 import "./style.css";
 import Searchbox from "../../components/searchbox";
 import Grouplist from "../../components/grouplists";
+import Friendrequest from "../../components/friendrequest";
+import Friend from "../../components/friends";
 const Home = () => {
   return (
     <>
@@ -14,9 +16,14 @@ const Home = () => {
           <div>
             <Grouplist />
           </div>
+          <div>
+            <Friendrequest />
+          </div>
         </Grid>
         <Grid item xs={4} className="home_items">
-          mid
+          <div>
+            <Friend />
+          </div>
         </Grid>
         <Grid item xs={4} className="home_items">
           right

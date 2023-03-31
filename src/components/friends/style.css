@@ -1,0 +1,9 @@
+.friends {
+  width: 100%;
+  background-color: white;
+  border-radius: 20px;
+  padding: 20px;
+  height: 320px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}

@@ -10,28 +10,36 @@ const Grouplist = () => {
         </div>
         <div className="group-item-wrraper">
           <div className="group-images"></div>
-          <div className="group-names">rony</div>
+          <div className="group-names">
+            <h5>rony</h5>
+          </div>
           <div className="group-list-btn">
             <button type="button">Join</button>
           </div>
         </div>
         <div className="group-item-wrraper">
           <div className="group-images"></div>
-          <div className="group-names">rony</div>
+          <div className="group-names">
+            <h5>rony</h5>
+          </div>
           <div className="group-list-btn">
             <button type="button">Join</button>
           </div>
         </div>
         <div className="group-item-wrraper">
           <div className="group-images"></div>
-          <div className="group-names">rony</div>
+          <div className="group-names">
+            <h5>rony</h5>
+          </div>
           <div className="group-list-btn">
             <button type="button">Join</button>
           </div>
         </div>
         <div className="group-item-wrraper">
           <div className="group-images"></div>
-          <div className="group-names">rony</div>
+          <div className="group-names">
+            <h5>rony</h5>
+          </div>
           <div className="group-list-btn">
             <button type="button">Join</button>
           </div>
