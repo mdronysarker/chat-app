@@ -1,23 +1,58 @@
 import React from "react";
 import "./style.css";
-import { Blocksdata } from "./data";
-import Rootcomponent from "../rootcomponent/Rootcomponent";
 
 const Blockusers = () => {
   return (
     <>
       <div className="blockusers">
         <div className="blockusers_header">
-          <h4>User List</h4>
+          <h4>Block</h4>
         </div>
-        {Blocksdata.map((item, i) => (
-          <Rootcomponent
-            key={i}
-            images={item.image}
-            name={item.name}
-            button={item.button}
-          />
-        ))}
+        <div className="blockusers-wrraper">
+          <div className="blockusers-images"></div>
+          <div className="blockusers-names">
+            <h5>rony</h5>
+          </div>
+          <div className="blockusers-btn">
+            <button type="button">Unblock</button>
+          </div>
+        </div>
+        <div className="blockusers-wrraper">
+          <div className="blockusers-images"></div>
+          <div className="blockusers-names">
+            <h5>rony</h5>
+          </div>
+          <div className="blockusers-btn">
+            <button type="button">Unblock</button>
+          </div>
+        </div>
+        <div className="blockusers-wrraper">
+          <div className="blockusers-images"></div>
+          <div className="blockusers-names">
+            <h5>rony</h5>
+          </div>
+          <div className="blockusers-btn">
+            <button type="button">Unblock</button>
+          </div>
+        </div>
+        <div className="blockusers-wrraper">
+          <div className="blockusers-images"></div>
+          <div className="blockusers-names">
+            <h5>rony</h5>
+          </div>
+          <div className="blockusers-btn">
+            <button type="button">Unblock</button>
+          </div>
+        </div>
+        <div className="blockusers-wrraper">
+          <div className="blockusers-images"></div>
+          <div className="blockusers-names">
+            <h5>rony</h5>
+          </div>
+          <div className="blockusers-btn">
+            <button type="button">Unblock</button>
+          </div>
+        </div>
       </div>
     </>
   );

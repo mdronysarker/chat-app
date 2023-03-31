@@ -15,3 +15,33 @@
   font-size: 20px;
   font-weight: 600;
 }
+
+.mygroups-item-wrraper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  border-bottom: 1px solid #c8c4c4;
+  padding-bottom: 15px;
+}
+
+.mygroups-item-wrraper:last-child {
+  border: none;
+}
+
+.mygroups-images {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: blueviolet;
+}
+
+.mygroups-names {
+  width: 60%;
+}
+
+.mygroups-names h5 {
+  font-family: var(--primary-font);
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 600;
+}
