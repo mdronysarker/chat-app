@@ -1,0 +1,28 @@
+.root_wrraper {
+  font-family: var(--primary-font);
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.root_wrraper:last-child {
+  border: none;
+}
+
+.root-images {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: blueviolet;
+}
+
+.root-names {
+  width: 60%;
+}
+
+.root-names h5 {
+  font-family: var(--primary-font);
+  color: var(--black);
+  font-size: 15px;
+  font-weight: 600;
+}

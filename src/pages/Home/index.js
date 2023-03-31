@@ -5,6 +5,7 @@ import Searchbox from "../../components/searchbox";
 import Grouplist from "../../components/grouplists";
 import Friendrequest from "../../components/friendrequest";
 import Friend from "../../components/friends";
+import Mygroups from "../../components/mygroups";
 const Home = () => {
   return (
     <>
@@ -23,6 +24,9 @@ const Home = () => {
         <Grid item xs={4} className="home_items">
           <div>
             <Friend />
+          </div>
+          <div>
+            <Mygroups />
           </div>
         </Grid>
         <Grid item xs={4} className="home_items">

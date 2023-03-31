@@ -1,0 +1,17 @@
+.mygroups {
+  width: 100%;
+  background-color: white;
+  margin-top: 15px;
+  border-radius: 20px;
+  padding: 20px;
+  height: 320px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.mygroups_header h4 {
+  font-family: var(--primary-font);
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 600;
+}
