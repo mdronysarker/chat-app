@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const Userlists = () => {
   const [usersList, setUsersList] = useState([]);
+  const [friendreq, setFriendreq] = useState([]);
   const user = useSelector((users) => users.login.loggedIn);
 
   const db = getDatabase();
@@ -33,6 +34,18 @@ const Userlists = () => {
   };
 
   // Show friend request
+  useEffect(() => {
+    const starCountRef = ref(db, "friendrequest/");
+    onValue(starCountRef, (snapshot) => {
+      const reqarr = [];
+      snapshot.forEach((item) => {
+        reqarr.push(item.val().reciverid + item.val().senderid);
+      });
+      setFriendreq(reqarr);
+    });
+  }, []);
+
+  console.log(friendreq);
 
   return (
     <>
@@ -47,9 +60,16 @@ const Userlists = () => {
               <h5>{item.username}</h5>
             </div>
             <div className="userlists-btn">
-              <button type="button" onClick={() => handleSentRequest(item)}>
-                Sent Request
-              </button>
+              {friendreq.includes(item.id + user.uid) ||
+              friendreq.includes(user.uid + item.id) ? (
+                <button type="button" disabled>
+                  Cancel Requset
+                </button>
+              ) : (
+                <button type="button" onClick={() => handleSentRequest(item)}>
+                  Sent Request
+                </button>
+              )}
             </div>
           </div>
         ))}
