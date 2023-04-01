@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 import "./style.css";
 import { useSelector } from "react-redux";
 
@@ -23,8 +30,13 @@ const Friendrequest = () => {
   }, []);
 
   // Apcepted req
-  const handleAccept = () => {
-    console.log("hii");
+  const handleAccept = (data) => {
+    set(push(ref(db, "friends")), {
+      sendername: data.sendername,
+      senderid: data.senderid,
+    }).then(() => {
+      remove(ref(db, "friendrequest/" + data.id));
+    });
   };
 
   return (

@@ -45,8 +45,6 @@ const Userlists = () => {
     });
   }, []);
 
-  console.log(friendreq);
-
   return (
     <>
       <div className="userlists">
