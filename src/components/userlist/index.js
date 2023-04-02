@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 import "./style.css";
 import { useSelector } from "react-redux";
 
 const Userlists = () => {
   const [usersList, setUsersList] = useState([]);
   const [friendreq, setFriendreq] = useState([]);
+  const [friendreqs, setFriendreqs] = useState([]);
   const user = useSelector((users) => users.login.loggedIn);
 
   const db = getDatabase();
@@ -21,7 +29,7 @@ const Userlists = () => {
       });
       setUsersList(userArr);
     });
-  }, []);
+  }, [user.uid, db]);
 
   // Sent Request
   const handleSentRequest = (item) => {
@@ -43,8 +51,28 @@ const Userlists = () => {
       });
       setFriendreq(reqarr);
     });
-  }, []);
+  }, [db]);
 
+  // cancel
+  useEffect(() => {
+    const starCountRef = ref(db, "friendrequest/");
+    onValue(starCountRef, (snapshot) => {
+      const reqarr = [];
+      snapshot.forEach((item) => {
+        reqarr.push({ ...item.val(), id: item.key });
+      });
+
+      setFriendreqs(reqarr);
+    });
+  }, [db]);
+
+  console.log(friendreqs);
+
+  // Cancel req
+  const handleCancel = (id) => {
+    remove(ref(db, "friendrequest/" + id));
+    console.log(id);
+  };
   return (
     <>
       <div className="userlists">
@@ -57,10 +85,20 @@ const Userlists = () => {
             <div className="userlists-names">
               <h5>{item.username}</h5>
             </div>
-            <div className="userlists-btn">
+            <div className="userlists-btn" key={i}>
               {friendreq.includes(item.id + user.uid) ||
               friendreq.includes(user.uid + item.id) ? (
-                <button type="button" disabled>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleCancel(
+                      friendreqs.find(
+                        (req) =>
+                          req.reciverid === item.id && req.senderid === user.uid
+                      ).id
+                    )
+                  }
+                >
                   Cancel Requset
                 </button>
               ) : (

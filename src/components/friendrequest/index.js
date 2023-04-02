@@ -27,7 +27,7 @@ const Friendrequest = () => {
       });
       setFriendreq(reqarr);
     });
-  }, []);
+  }, [user.uid, db]);
 
   // Apcepted req
   const handleAccept = (data) => {
