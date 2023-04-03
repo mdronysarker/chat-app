@@ -73,6 +73,7 @@ const Userlists = () => {
     remove(ref(db, "friendrequest/" + id));
     console.log(id);
   };
+
   return (
     <>
       <div className="userlists">
