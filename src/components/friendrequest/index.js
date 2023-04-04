@@ -17,7 +17,7 @@ const Friendrequest = () => {
   const db = getDatabase();
 
   useEffect(() => {
-    const starCountRef = ref(db, "friendrequest/");
+    const starCountRef = ref(db, "friendrequest");
     onValue(starCountRef, (snapshot) => {
       const reqarr = [];
       snapshot.forEach((item) => {
@@ -32,8 +32,7 @@ const Friendrequest = () => {
   // Apcepted req
   const handleAccept = (data) => {
     set(push(ref(db, "friends")), {
-      sendername: data.sendername,
-      senderid: data.senderid,
+      ...data,
     }).then(() => {
       remove(ref(db, "friendrequest/" + data.id));
     });

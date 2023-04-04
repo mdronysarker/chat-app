@@ -1,14 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 import "./style.css";
+import { useSelector } from "react-redux";
 
 const Friend = () => {
   const [friend, setFriend] = useState([]);
 
   const db = getDatabase();
+  const user = useSelector((users) => users.login.loggedIn);
+  // console.log(user);
 
+  // Show friend
   useEffect(() => {
-    const starCountRef = ref(db, "friends/");
+    const starCountRef = ref(db, "friends");
     onValue(starCountRef, (snapshot) => {
       let friendArr = [];
       snapshot.forEach((friend) => {
@@ -18,7 +29,30 @@ const Friend = () => {
     });
   }, [db]);
 
-  console.log(friend);
+  // BlockList
+  const handleBlock = (data) => {
+    if (user.uid === data.senderid) {
+      set(push(ref(db, "block")), {
+        Block: data.recivername,
+        BlockId: data.reciverid,
+        BlockBy: data.sendername,
+        BlockById: data.senderid,
+      }).then(() => {
+        remove(ref(db, "friends/" + data.id));
+        // console.log(data.id);
+      });
+    } else {
+      set(push(ref(db, "block")), {
+        Block: data.sendername,
+        BlockId: data.senderid,
+        BlockBy: data.recivername,
+        BlockById: data.reciverid,
+      }).then(() => {
+        remove(ref(db, "friends/" + data.id));
+        // console.log(data.id);
+      });
+    }
+  };
 
   return (
     <>
@@ -29,10 +63,14 @@ const Friend = () => {
         {friend.map((item, i) => (
           <div className="friend-item-wrraper" key={i}>
             <div className="friend-images"></div>
-            <div className="friend-names">{item.sendername}</div>
+            <div className="friend-names">
+              {user.uid === item.senderid ? item.recivername : item.sendername}
+            </div>
             <div className="friend-list-btn">
               <button type="button">Unfriend</button>
-              <button type="button">Block</button>
+              <button type="button" onClick={() => handleBlock(item)}>
+                Block
+              </button>
             </div>
           </div>
         ))}

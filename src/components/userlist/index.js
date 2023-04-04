@@ -13,13 +13,15 @@ import { useSelector } from "react-redux";
 const Userlists = () => {
   const [usersList, setUsersList] = useState([]);
   const [friendreq, setFriendreq] = useState([]);
-  const [friendreqs, setFriendreqs] = useState([]);
+  const [cancelreq, setCancelreq] = useState([]);
+  const [friend, setFriend] = useState([]);
   const user = useSelector((users) => users.login.loggedIn);
+  // console.log(user);
 
   const db = getDatabase();
 
   useEffect(() => {
-    const starCountRef = ref(db, "users/");
+    const starCountRef = ref(db, "users");
     onValue(starCountRef, (snapshot) => {
       const userArr = [];
       snapshot.forEach((userlist) => {
@@ -43,7 +45,7 @@ const Userlists = () => {
 
   // Show friend request
   useEffect(() => {
-    const starCountRef = ref(db, "friendrequest/");
+    const starCountRef = ref(db, "friendrequest");
     onValue(starCountRef, (snapshot) => {
       const reqarr = [];
       snapshot.forEach((item) => {
@@ -53,25 +55,35 @@ const Userlists = () => {
     });
   }, [db]);
 
+  // Show friend
+  useEffect(() => {
+    const starCountRef = ref(db, "friends");
+    onValue(starCountRef, (snapshot) => {
+      let friendArr = [];
+      snapshot.forEach((friend) => {
+        friendArr.push(friend.val().reciverid + friend.val().senderid);
+      });
+      setFriend(friendArr);
+    });
+  }, [db]);
+
   // cancel
   useEffect(() => {
-    const starCountRef = ref(db, "friendrequest/");
+    const starCountRef = ref(db, "friendrequest");
     onValue(starCountRef, (snapshot) => {
       const reqarr = [];
       snapshot.forEach((item) => {
         reqarr.push({ ...item.val(), id: item.key });
       });
 
-      setFriendreqs(reqarr);
+      setCancelreq(reqarr);
     });
   }, [db]);
-
-  console.log(friendreqs);
 
   // Cancel req
   const handleCancel = (id) => {
     remove(ref(db, "friendrequest/" + id));
-    console.log(id);
+    // console.log(id);
   };
 
   return (
@@ -82,18 +94,23 @@ const Userlists = () => {
         </div>
         {usersList.map((item, i) => (
           <div key={i} className="userlists-wrraper">
-            <div className="userlists-images"></div>
+            <div className="userlists-images">
+              <img src={item.photoURL} alt="" />
+            </div>
             <div className="userlists-names">
               <h5>{item.username}</h5>
             </div>
             <div className="userlists-btn" key={i}>
-              {friendreq.includes(item.id + user.uid) ||
-              friendreq.includes(user.uid + item.id) ? (
+              {friend.includes(item.id + user.uid) ||
+              friend.includes(user.uid + item.id) ? (
+                <button ype="button"> Friend</button>
+              ) : friendreq.includes(item.id + user.uid) ||
+                friendreq.includes(user.uid + item.id) ? (
                 <button
                   type="button"
                   onClick={() =>
                     handleCancel(
-                      friendreqs.find(
+                      cancelreq.find(
                         (req) =>
                           req.reciverid === item.id && req.senderid === user.uid
                       ).id
