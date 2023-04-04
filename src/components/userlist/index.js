@@ -15,6 +15,8 @@ const Userlists = () => {
   const [friendreq, setFriendreq] = useState([]);
   const [cancelreq, setCancelreq] = useState([]);
   const [friend, setFriend] = useState([]);
+  const [blockList, setBlockList] = useState([]);
+
   const user = useSelector((users) => users.login.loggedIn);
   // console.log(user);
 
@@ -67,6 +69,20 @@ const Userlists = () => {
     });
   }, [db]);
 
+  // Block
+  useEffect(() => {
+    const starCountRef = ref(db, "block");
+    onValue(starCountRef, (snapshot) => {
+      let blockArr = [];
+      snapshot.forEach((block) => {
+        blockArr.push(block.val().BlockId + block.val().BlockById);
+      });
+      setBlockList(blockArr);
+    });
+  }, [db]);
+
+  // console.log(blockList);
+
   // cancel
   useEffect(() => {
     const starCountRef = ref(db, "friendrequest");
@@ -101,8 +117,11 @@ const Userlists = () => {
               <h5>{item.username}</h5>
             </div>
             <div className="userlists-btn" key={i}>
-              {friend.includes(item.id + user.uid) ||
-              friend.includes(user.uid + item.id) ? (
+              {blockList.includes(item.id + user.uid) ||
+              blockList.includes(user.uid + item.id) ? (
+                <button>Block</button>
+              ) : friend.includes(item.id + user.uid) ||
+                friend.includes(user.uid + item.id) ? (
                 <button ype="button"> Friend</button>
               ) : friendreq.includes(item.id + user.uid) ||
                 friendreq.includes(user.uid + item.id) ? (
