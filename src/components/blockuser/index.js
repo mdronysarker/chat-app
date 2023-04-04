@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  set,
+  push,
+  remove,
+} from "firebase/database";
 import "./style.css";
 import { useSelector } from "react-redux";
 
@@ -16,12 +23,35 @@ const Blockusers = () => {
       let blockArr = [];
       snapshot.forEach((block) => {
         if (block.val().BlockById === user.uid) {
-          blockArr.push({ ...block.val(), id: block.key });
+          // blockArr.push({ ...block.val(), id: block.key });
+          blockArr.push({
+            id: block.key,
+            block: block.val().Block,
+            blockid: block.val().BlockId,
+          });
+        } else {
+          blockArr.push({
+            id: block.key,
+            blockby: block.val().BlockBy,
+            blockid: block.val().BlockById,
+          });
         }
       });
       setBlockList(blockArr);
     });
   }, [db, user.uid]);
+
+  const handleBlock = (item) => {
+    set(push(ref(db, "friends")), {
+      sendername: item.block,
+      senderid: item.blockid,
+      reciverid: user.uid,
+      recivername: user.displayName,
+    }).then(() => {
+      remove(ref(db, "block/" + item.id));
+    });
+  };
+
   return (
     <>
       <div className="blockusers">
@@ -33,11 +63,17 @@ const Blockusers = () => {
             {/* {console.log(item.block)} */}
             <div className="blockusers-images"></div>
             <div className="blockusers-names">
-              <h5>{item.Block}</h5>
+              <h5>{item.block}</h5>
+              <h5>{item.blockby}</h5>
             </div>
-            <div className="blockusers-btn">
-              <button type="button">Unblock</button>
-            </div>
+
+            {!item.blockby && (
+              <div className="blockusers-btn">
+                <button type="button" onClick={() => handleBlock(item)}>
+                  Unblock
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>

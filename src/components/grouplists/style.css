@@ -9,6 +9,12 @@
   box-sizing: border-box;
 }
 
+.grouplist_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .grouplist_header h4 {
   font-family: var(--primary-font);
   color: var(--black);

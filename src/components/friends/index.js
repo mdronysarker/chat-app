@@ -23,11 +23,18 @@ const Friend = () => {
     onValue(starCountRef, (snapshot) => {
       let friendArr = [];
       snapshot.forEach((friend) => {
-        friendArr.push({ ...friend.val(), id: friend.key });
+        if (
+          (user.uid === friend.val().senderid &&
+            user.uid !== friend.val().reciverid) ||
+          (user.uid === friend.val().reciverid &&
+            user.uid !== friend.val().senderid)
+        ) {
+          friendArr.push({ ...friend.val(), id: friend.key });
+        }
       });
       setFriend(friendArr);
     });
-  }, [db]);
+  }, [db, user.uid]);
 
   // BlockList
   const handleBlock = (data) => {
