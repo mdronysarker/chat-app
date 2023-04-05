@@ -20,10 +20,10 @@ const Uploadpicture = ({ setOpen }) => {
   const chooseFile = useRef(null);
 
   const storage = getStorage();
-  const storageRef = ref(storage, "some-child");
   const auth = getAuth();
   const dispatch = useDispatch();
   const user = useSelector((user) => user.login.loggedIn);
+  const storageRef = ref(storage, user.uid);
 
   const handleUpdateProfile = (e) => {
     e.preventDefault();

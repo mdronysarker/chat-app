@@ -9,6 +9,7 @@ import {
 } from "firebase/database";
 import "./style.css";
 import { useSelector } from "react-redux";
+import { getStorage, ref as Ref, getDownloadURL } from "firebase/storage";
 
 const Userlists = () => {
   const [usersList, setUsersList] = useState([]);
@@ -21,6 +22,7 @@ const Userlists = () => {
   // console.log(user);
 
   const db = getDatabase();
+  const storage = getStorage();
 
   useEffect(() => {
     const starCountRef = ref(db, "users");
@@ -28,12 +30,28 @@ const Userlists = () => {
       const userArr = [];
       snapshot.forEach((userlist) => {
         if (user.uid !== userlist.key) {
-          userArr.push({ ...userlist.val(), id: userlist.key });
+          getDownloadURL(Ref(storage, userlist.key))
+            .then((url) => {
+              userArr.push({
+                ...userlist.val(),
+                id: userlist.key,
+                profilePicture: url,
+              });
+            })
+            .catch((error) => {
+              userArr.push({
+                ...userlist.val(),
+                id: userlist.key,
+                profilePicture: null,
+              });
+            })
+            .then(() => {
+              setUsersList([...userArr]);
+            });
         }
       });
-      setUsersList(userArr);
     });
-  }, [user.uid, db]);
+  }, [user.uid, db, storage]);
 
   // Sent Request
   const handleSentRequest = (item) => {
@@ -111,7 +129,15 @@ const Userlists = () => {
         {usersList.map((item, i) => (
           <div key={i} className="userlists-wrraper">
             <div className="userlists-images">
-              <img src={item.photoURL} alt="" />
+              <picture>
+                <img
+                  src={item.profilePicture || "./images/profile-pic.jpg"}
+                  onError={(e) => {
+                    e.target.src = "./images/profile-pic.jpg";
+                  }}
+                  alt=""
+                />
+              </picture>
             </div>
             <div className="userlists-names">
               <h5>{item.username}</h5>

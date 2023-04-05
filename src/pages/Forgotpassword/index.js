@@ -16,7 +16,7 @@ const Forget = () => {
     onSubmit: () => {
       sendPasswordResetEmail(auth, formik.values.email)
         .then(() => {
-          // console.log("password reset is done");
+          console.log("password reset is done");
           formik.resetForm();
         })
         .catch((error) => {
