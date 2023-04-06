@@ -29,8 +29,11 @@ const Friendrequest = () => {
     });
   }, [user.uid, db]);
 
+  // console.log(friendreq);
+
   // Apcepted req
   const handleAccept = (data) => {
+    console.log("data", data);
     set(push(ref(db, "friends")), {
       ...data,
     }).then(() => {
@@ -46,7 +49,18 @@ const Friendrequest = () => {
         </div>
         {friendreq.map((item, i) => (
           <div key={i} className="friendrequest-item-wrraper">
-            <div className="friendrequest-images"></div>
+            {console.log("friendreq", item)}
+            <div className="friendrequest-images">
+              <picture>
+                <img
+                  src={item.profilePicture || "./images/profile-pic.jpg"}
+                  onError={(e) => {
+                    e.target.src = "./images/profile-pic.jpg";
+                  }}
+                  alt=""
+                />
+              </picture>
+            </div>
             <div className="friendrequest-names">
               <h5>{item.sendername}</h5>
             </div>

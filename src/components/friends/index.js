@@ -29,12 +29,17 @@ const Friend = () => {
           (user.uid === friend.val().reciverid &&
             user.uid !== friend.val().senderid)
         ) {
-          friendArr.push({ ...friend.val(), id: friend.key });
+          friendArr.push({
+            ...friend.val(),
+            id: friend.key,
+          });
         }
       });
       setFriend(friendArr);
     });
   }, [db, user.uid]);
+
+  console.log(friend);
 
   // BlockList
   const handleBlock = (data) => {
@@ -69,7 +74,29 @@ const Friend = () => {
         </div>
         {friend.map((item, i) => (
           <div className="friend-item-wrraper" key={i}>
-            <div className="friend-images"></div>
+            <div className="friend-images">
+              {user.uid === item.reciverid ? (
+                <picture>
+                  <img
+                    src={item.profilePicture || "./images/profile-pic.jpg"}
+                    onError={(e) => {
+                      e.target.src = "./images/profile-pic.jpg";
+                    }}
+                    alt=""
+                  />
+                </picture>
+              ) : (
+                <picture>
+                  <img
+                    src={item.reciverPicture || "./images/profile-pic.jpg"}
+                    onError={(e) => {
+                      e.target.src = "./images/profile-pic.jpg";
+                    }}
+                    alt=""
+                  />
+                </picture>
+              )}
+            </div>
             <div className="friend-names">
               {user.uid === item.senderid ? item.recivername : item.sendername}
             </div>

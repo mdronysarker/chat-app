@@ -32,7 +32,13 @@
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background-color: blueviolet;
+  overflow: hidden;
+}
+
+.friendrequest-images img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .friendrequest-names {
