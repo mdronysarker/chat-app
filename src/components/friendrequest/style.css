@@ -66,6 +66,7 @@
   font-family: var(--primary-font);
   font-size: 14px;
   font-weight: 600;
+  cursor: pointer;
 }
 
 .friendrequest-list-btn button:last-child {

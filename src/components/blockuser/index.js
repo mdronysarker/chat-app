@@ -28,12 +28,16 @@ const Blockusers = () => {
             id: block.key,
             block: block.val().Block,
             blockid: block.val().BlockId,
+            reciverProfile: block.val().reciverProfile,
+            // senderProfile: block.val().senderProfile,
           });
         } else {
           blockArr.push({
             id: block.key,
             blockby: block.val().BlockBy,
             blockid: block.val().BlockById,
+            // reciverProfile: block.val().reciverProfile,
+            senderProfile: block.val().senderProfile,
           });
         }
       });
@@ -41,7 +45,7 @@ const Blockusers = () => {
     });
   }, [db, user.uid]);
 
-  const handleBlock = (item) => {
+  const handleUnBlock = (item) => {
     set(push(ref(db, "friends")), {
       sendername: item.block,
       senderid: item.blockid,
@@ -60,8 +64,18 @@ const Blockusers = () => {
         </div>
         {blockList.map((item, i) => (
           <div className="blockusers-wrraper" key={i}>
-            {/* {console.log(item.block)} */}
-            <div className="blockusers-images"></div>
+            {console.log(item.senderPicture)}
+            <div className="blockusers-images">
+              <picture>
+                <img
+                  src={item.reciverProfile ?? item.senderProfile}
+                  onError={(e) => {
+                    e.target.src = "./images/profile-pic.jpg";
+                  }}
+                  alt=""
+                />
+              </picture>
+            </div>
             <div className="blockusers-names">
               <h5>{item.block}</h5>
               <h5>{item.blockby}</h5>
@@ -69,7 +83,7 @@ const Blockusers = () => {
 
             {!item.blockby && (
               <div className="blockusers-btn">
-                <button type="button" onClick={() => handleBlock(item)}>
+                <button type="button" onClick={() => handleUnBlock(item)}>
                   Unblock
                 </button>
               </div>

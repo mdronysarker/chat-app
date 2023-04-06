@@ -60,7 +60,7 @@ const Userlists = () => {
       senderid: user.uid,
       recivername: item.username,
       reciverid: item.id,
-      profilePicture: user.photoURL,
+      profilePicture: user.photoURL || "./images/profile-pic.jpg",
       reciverPicture: item.profilePicture || "./images/profile-pic.jpg",
     });
   };

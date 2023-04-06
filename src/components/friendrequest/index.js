@@ -33,12 +33,16 @@ const Friendrequest = () => {
 
   // Apcepted req
   const handleAccept = (data) => {
-    console.log("data", data);
     set(push(ref(db, "friends")), {
       ...data,
     }).then(() => {
       remove(ref(db, "friendrequest/" + data.id));
     });
+  };
+
+  // Reject friend
+  const handleReject = (data) => {
+    remove(ref(db, "friendrequest/" + data.id));
   };
 
   return (
@@ -49,7 +53,6 @@ const Friendrequest = () => {
         </div>
         {friendreq.map((item, i) => (
           <div key={i} className="friendrequest-item-wrraper">
-            {console.log("friendreq", item)}
             <div className="friendrequest-images">
               <picture>
                 <img
@@ -68,7 +71,9 @@ const Friendrequest = () => {
               <button type="button" onClick={() => handleAccept(item)}>
                 Accept
               </button>
-              <button type="button">Reject</button>
+              <button type="button" onClick={() => handleReject(item)}>
+                Reject
+              </button>
             </div>
           </div>
         ))}

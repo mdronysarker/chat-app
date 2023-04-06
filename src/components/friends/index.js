@@ -49,6 +49,8 @@ const Friend = () => {
         BlockId: data.reciverid,
         BlockBy: data.sendername,
         BlockById: data.senderid,
+        reciverProfile: data.reciverPicture,
+        senderProfile: data.profilePicture,
       }).then(() => {
         remove(ref(db, "friends/" + data.id));
         // console.log(data.id);
@@ -59,11 +61,18 @@ const Friend = () => {
         BlockId: data.senderid,
         BlockBy: data.recivername,
         BlockById: data.reciverid,
+        reciverProfile: data.profilePicture,
+        senderProfile: data.reciverPicture,
       }).then(() => {
         remove(ref(db, "friends/" + data.id));
         // console.log(data.id);
       });
     }
+  };
+
+  // For Unfirend
+  const handleUnfriend = (data) => {
+    remove(ref(db, "friends/" + data.id));
   };
 
   return (
@@ -101,7 +110,9 @@ const Friend = () => {
               {user.uid === item.senderid ? item.recivername : item.sendername}
             </div>
             <div className="friend-list-btn">
-              <button type="button">Unfriend</button>
+              <button type="button" onClick={() => handleUnfriend(item)}>
+                Unfriend
+              </button>
               <button type="button" onClick={() => handleBlock(item)}>
                 Block
               </button>
