@@ -15,6 +15,7 @@ const Blockusers = () => {
 
   const db = getDatabase();
   const user = useSelector((users) => users.login.loggedIn);
+  // console.log(user);
 
   // For block user
   useEffect(() => {
