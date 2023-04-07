@@ -52,6 +52,8 @@ const Blockusers = () => {
       senderid: item.blockid,
       reciverid: user.uid,
       recivername: user.displayName,
+      reciverPicture: user.photoURL ?? "./images/profile-pic.jpg",
+      profilePicture: item.reciverProfile,
     }).then(() => {
       remove(ref(db, "block/" + item.id));
     });
