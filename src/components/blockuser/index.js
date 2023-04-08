@@ -23,23 +23,30 @@ const Blockusers = () => {
     onValue(starCountRef, (snapshot) => {
       let blockArr = [];
       snapshot.forEach((block) => {
-        if (block.val().BlockById === user.uid) {
-          // blockArr.push({ ...block.val(), id: block.key });
-          blockArr.push({
-            id: block.key,
-            block: block.val().Block,
-            blockid: block.val().BlockId,
-            reciverProfile: block.val().reciverProfile,
-            // senderProfile: block.val().senderProfile,
-          });
-        } else {
-          blockArr.push({
-            id: block.key,
-            blockby: block.val().BlockBy,
-            blockid: block.val().BlockById,
-            // reciverProfile: block.val().reciverProfile,
-            senderProfile: block.val().senderProfile,
-          });
+        if (
+          (user.uid === block.val().BlockById &&
+            user.uid !== block.val().BlockId) ||
+          (user.uid === block.val().BlockId &&
+            user.uid !== block.val().BlockById)
+        ) {
+          if (block.val().BlockById === user.uid) {
+            // blockArr.push({ ...block.val(), id: block.key });
+            blockArr.push({
+              id: block.key,
+              block: block.val().Block,
+              blockid: block.val().BlockId,
+              reciverProfile: block.val().reciverProfile,
+              // senderProfile: block.val().senderProfile,
+            });
+          } else {
+            blockArr.push({
+              id: block.key,
+              blockby: block.val().BlockBy,
+              blockid: block.val().BlockById,
+              // reciverProfile: block.val().reciverProfile,
+              senderProfile: block.val().senderProfile,
+            });
+          }
         }
       });
       setBlockList(blockArr);

@@ -1,13 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import "./style.css";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import { getDatabase, push, ref, set } from "firebase/database";
+import { useSelector } from "react-redux";
 
 const Grouplist = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const user = useSelector((users) => users.login.loggedIn);
+
+  const [info, setInfo] = useState({
+    groupName: "",
+    groupTag: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const db = getDatabase();
 
@@ -24,7 +40,14 @@ const Grouplist = () => {
   };
 
   const handleCreate = () => {
-    set(push(ref(db, "group")), {});
+    set(push(ref(db, "group")), {
+      groupName: info.groupName,
+      groupTag: info.groupTag,
+      adminName: user.displayName,
+      adminId: user.uid,
+    }).then(() => {
+      setOpen(false);
+    });
   };
 
   return (
@@ -61,6 +84,9 @@ const Grouplist = () => {
               variant="outlined"
               margin="normal"
               fullWidth
+              name="groupName"
+              value={info.groupName}
+              onChange={handleChange}
             />
             <TextField
               id="outlined-basic"
@@ -68,8 +94,16 @@ const Grouplist = () => {
               variant="outlined"
               margin="normal"
               fullWidth
+              name="groupTag"
+              value={info.groupTag}
+              onChange={handleChange}
             />
-            <Button variant="contained" margin="normal" onClick={handleCreate}>
+            <Button
+              type="submit"
+              variant="contained"
+              margin="normal"
+              onClick={handleCreate}
+            >
               Create New Group
             </Button>
           </Box>
