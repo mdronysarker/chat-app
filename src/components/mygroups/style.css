@@ -22,6 +22,7 @@
   margin-top: 15px;
   border-bottom: 1px solid #c8c4c4;
   padding-bottom: 15px;
+  align-items: center;
 }
 
 .mygroups-item-wrraper:last-child {
@@ -39,9 +40,36 @@
   width: 60%;
 }
 
-.mygroups-names h5 {
+.mygroups-names h4 {
   font-family: var(--primary-font);
   color: var(--black);
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 600;
+}
+
+.mygroups-names span {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.mygroups_btn {
+  width: 20%;
+}
+
+.mygroups_btn button {
+  width: 100%;
+  border: none;
+  padding: 8px 0;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  color: #fff;
+  font-family: var(--primary-font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mygroups_btn button:last-child {
+  background-color: rgb(234, 65, 65);
+  margin-top: 5px;
 }
