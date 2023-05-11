@@ -49,7 +49,7 @@ const Forget = () => {
                 margin="normal"
                 label="Email"
                 variant="outlined"
-                type={"text"}
+                type={"email"}
                 name="email"
                 value={formik.values.email}
                 onChange={formik.handleChange}

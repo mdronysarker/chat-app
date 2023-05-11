@@ -14,6 +14,7 @@
   color: var(--black);
   font-size: 20px;
   font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .mygroups-item-wrraper {
@@ -37,7 +38,7 @@
 }
 
 .mygroups-names {
-  width: 60%;
+  width: 35%;
 }
 
 .mygroups-names h4 {

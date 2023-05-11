@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import { getDatabase, push, ref, set } from "firebase/database";
+import { getDatabase, onValue, push, ref, set } from "firebase/database";
 import { useSelector } from "react-redux";
 
 const Grouplist = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [groupList, setGroupList] = useState([]);
 
   const user = useSelector((users) => users.login.loggedIn);
 
@@ -50,6 +52,31 @@ const Grouplist = () => {
     });
   };
 
+  useEffect(() => {
+    const starCountRef = ref(db, "group");
+    onValue(starCountRef, (snapshot) => {
+      const mygroupListArr = [];
+      snapshot.forEach((grouplist) => {
+        if (user.uid !== grouplist.val().adminId) {
+          mygroupListArr.push({ ...grouplist.val(), id: grouplist.key });
+        }
+      });
+      setGroupList(mygroupListArr);
+    });
+  }, [db, user.uid]);
+
+  const handleJoinGrp = (item) => {
+    set(push(ref(db, "groupjoinrequest")), {
+      groupid: item.id,
+      groupname: item.groupName,
+      grouptag: item.groupTag,
+      adminid: item.adminId,
+      adminname: item.adminName,
+      userid: user.uid,
+      username: user.displayName,
+    });
+  };
+
   return (
     <>
       <div className="grouplist">
@@ -59,15 +86,25 @@ const Grouplist = () => {
             Create Group
           </Button>
         </div>
-        <div className="group-item-wrraper">
-          <div className="group-images"></div>
-          <div className="group-names">
-            <h5>rony</h5>
-          </div>
-          <div className="group-list-btn">
-            <button type="button">Join</button>
-          </div>
-        </div>
+        {groupList.length === 0 ? (
+          <Alert severity="error">No groupList created yet</Alert>
+        ) : (
+          groupList.map((item, i) => (
+            <div className="group-item-wrraper" key={i}>
+              <div className="group-images"></div>
+              <div className="group-names">
+                <span>Admin {item.adminName}</span>
+                <h4>{item.groupName}</h4>
+                <span>{item.groupTag}</span>
+              </div>
+              <div className="group-list-btn">
+                <button type="button" onClick={() => handleJoinGrp(item)}>
+                  Join
+                </button>
+              </div>
+            </div>
+          ))
+        )}
         <Modal
           open={open}
           onClose={handleClose}

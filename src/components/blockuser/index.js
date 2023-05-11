@@ -74,7 +74,6 @@ const Blockusers = () => {
         </div>
         {blockList.map((item, i) => (
           <div className="blockusers-wrraper" key={i}>
-            {console.log(item.senderPicture)}
             <div className="blockusers-images">
               <picture>
                 <img
