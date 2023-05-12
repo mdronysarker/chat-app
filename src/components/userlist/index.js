@@ -9,6 +9,7 @@ import {
 } from "firebase/database";
 import "./style.css";
 import { useSelector } from "react-redux";
+import { BsSearch } from "react-icons/bs";
 import { getStorage, ref as Ref, getDownloadURL } from "firebase/storage";
 
 const Userlists = () => {
@@ -122,8 +123,28 @@ const Userlists = () => {
     // console.log(id);
   };
 
+  const handleSearch = (e) => {
+    usersList.filter((item) => {
+      if (item.username.toLowerCase().includes(e.target.value.toLowerCase())) {
+        console.log("achi");
+      }
+    });
+  };
+
   return (
     <>
+      <div className="search_wrapper">
+        <div className="search_icon">
+          <BsSearch />
+        </div>
+        <div className="search_fields">
+          <input
+            type="text"
+            onChange={handleSearch}
+            placeholder="search here"
+          />
+        </div>
+      </div>
       <div className="userlists">
         <div className="userlists_header">
           <h4>User List</h4>

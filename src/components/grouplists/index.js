@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import { getDatabase, onValue, push, ref, set } from "firebase/database";
+import {
+  getDatabase,
+  onValue,
+  push,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 import { useSelector } from "react-redux";
 
 const Grouplist = () => {
@@ -11,6 +18,9 @@ const Grouplist = () => {
   const handleClose = () => setOpen(false);
 
   const [groupList, setGroupList] = useState([]);
+  const [groupReq, setGroupReq] = useState([]);
+  const [cancelreq, setCancelreq] = useState([]);
+  const [joinmember, setJoinmember] = useState([]);
 
   const user = useSelector((users) => users.login.loggedIn);
 
@@ -77,6 +87,51 @@ const Grouplist = () => {
     });
   };
 
+  // for show grpjoin
+  useEffect(() => {
+    const starCountRef = ref(db, "groupjoinrequest");
+    onValue(starCountRef, (snapshot) => {
+      const reqarr = [];
+      snapshot.forEach((item) => {
+        reqarr.push(
+          item.val().adminid + item.val().userid + item.val().groupid
+        );
+      });
+      setGroupReq(reqarr);
+    });
+  }, [db]);
+
+  // For joined member
+  useEffect(() => {
+    const starCountRef = ref(db, "groupmembers");
+    onValue(starCountRef, (snapshot) => {
+      const acceptReq = [];
+      snapshot.forEach((item) => {
+        acceptReq.push(
+          item.val().adminId + item.val().userId + item.val().groupId
+        );
+      });
+      setJoinmember(acceptReq);
+    });
+  }, [db]);
+
+  // For cancel
+  useEffect(() => {
+    const starCountRef = ref(db, "groupjoinrequest");
+    onValue(starCountRef, (snapshot) => {
+      const reqarr = [];
+      snapshot.forEach((item) => {
+        reqarr.push({ ...item.val(), id: item.key });
+      });
+      setCancelreq(reqarr);
+    });
+  }, [db]);
+
+  // For cancel
+  const handleCancel = (id) => {
+    remove(ref(db, "groupjoinrequest/" + id));
+  };
+
   return (
     <>
       <div className="grouplist">
@@ -97,10 +152,36 @@ const Grouplist = () => {
                 <h4>{item.groupName}</h4>
                 <span>{item.groupTag}</span>
               </div>
-              <div className="group-list-btn">
-                <button type="button" onClick={() => handleJoinGrp(item)}>
-                  Join
-                </button>
+              <div className="group-list-btn ">
+                {groupReq.includes(item.adminId + user.uid + item.id) ? (
+                  <Button
+                    variant="contained"
+                    onClick={() =>
+                      handleCancel(
+                        cancelreq.find(
+                          (req) =>
+                            req.adminid === item.adminId &&
+                            req.userid === user.uid
+                        ).id
+                      )
+                    }
+                  >
+                    Cancel Join
+                  </Button>
+                ) : joinmember.includes(item.adminId + user.uid + item.id) ? (
+                  <div className="group-list-btn">
+                    <Button variant="contained">Joined</Button>
+                  </div>
+                ) : (
+                  <div className="group-list-btn">
+                    <Button
+                      variant="contained"
+                      onClick={() => handleJoinGrp(item)}
+                    >
+                      Join
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           ))

@@ -104,6 +104,11 @@ const Mygroups = () => {
     });
   };
 
+  // For reject
+  const handleReject = (item) => {
+    remove(ref(db, "groupjoinrequest/" + item.id));
+  };
+
   return (
     <>
       <div className="mygroups">
@@ -198,7 +203,11 @@ const Mygroups = () => {
                           </Button>
                         </div>
                         <div>
-                          <Button variant="contained" color="error">
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => handleReject(item)}
+                          >
                             Reject
                           </Button>
                         </div>
