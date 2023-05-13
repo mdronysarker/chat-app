@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   getDatabase,
   ref,
@@ -18,6 +18,9 @@ const Userlists = () => {
   const [cancelreq, setCancelreq] = useState([]);
   const [friend, setFriend] = useState([]);
   const [blockList, setBlockList] = useState([]);
+  // For search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchQueryRef = useRef(searchQuery);
 
   const user = useSelector((users) => users.login.loggedIn);
   // console.log(user);
@@ -124,12 +127,13 @@ const Userlists = () => {
   };
 
   const handleSearch = (e) => {
-    usersList.filter((item) => {
-      if (item.username.toLowerCase().includes(e.target.value.toLowerCase())) {
-        console.log("achi");
-      }
-    });
+    setSearchQuery(e.target.value);
+    searchQueryRef.current = e.target.value;
   };
+
+  // console.log(
+  //   usersList.filter((user) => user.username.toLowerCase().includes("ro"))
+  // );
 
   return (
     <>
@@ -141,6 +145,7 @@ const Userlists = () => {
           <input
             type="text"
             onChange={handleSearch}
+            onBlur={handleSearch}
             placeholder="search here"
           />
         </div>
@@ -149,52 +154,58 @@ const Userlists = () => {
         <div className="userlists_header">
           <h4>User List</h4>
         </div>
-        {usersList.map((item, i) => (
-          <div key={i} className="userlists-wrraper">
-            <div className="userlists-images">
-              <picture>
-                <img
-                  src={item.profilePicture || "./images/profile-pic.jpg"}
-                  onError={(e) => {
-                    e.target.src = "./images/profile-pic.jpg";
-                  }}
-                  alt=""
-                />
-              </picture>
+        {usersList
+          .filter((item) =>
+            item.username.toLowerCase().includes(searchQueryRef.current)
+          )
+          .map((item, i) => (
+            <div key={i} className="userlists-wrraper">
+              <div className="userlists-images">
+                <picture>
+                  <img
+                    src={item.profilePicture || "./images/profile-pic.jpg"}
+                    onError={(e) => {
+                      e.target.src = "./images/profile-pic.jpg";
+                    }}
+                    alt=""
+                  />
+                </picture>
+              </div>
+              {}
+              <div className="userlists-names">
+                <h5>{item.username}</h5>
+              </div>
+              <div className="userlists-btn" key={i}>
+                {blockList.includes(item.id + user.uid) ||
+                blockList.includes(user.uid + item.id) ? (
+                  <button>Block</button>
+                ) : friend.includes(item.id + user.uid) ||
+                  friend.includes(user.uid + item.id) ? (
+                  <button ype="button"> Friend</button>
+                ) : friendreq.includes(item.id + user.uid) ||
+                  friendreq.includes(user.uid + item.id) ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleCancel(
+                        cancelreq.find(
+                          (req) =>
+                            req.reciverid === item.id &&
+                            req.senderid === user.uid
+                        ).id
+                      )
+                    }
+                  >
+                    Cancel Requset
+                  </button>
+                ) : (
+                  <button type="button" onClick={() => handleSentRequest(item)}>
+                    Sent Request
+                  </button>
+                )}
+              </div>
             </div>
-            <div className="userlists-names">
-              <h5>{item.username}</h5>
-            </div>
-            <div className="userlists-btn" key={i}>
-              {blockList.includes(item.id + user.uid) ||
-              blockList.includes(user.uid + item.id) ? (
-                <button>Block</button>
-              ) : friend.includes(item.id + user.uid) ||
-                friend.includes(user.uid + item.id) ? (
-                <button ype="button"> Friend</button>
-              ) : friendreq.includes(item.id + user.uid) ||
-                friendreq.includes(user.uid + item.id) ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleCancel(
-                      cancelreq.find(
-                        (req) =>
-                          req.reciverid === item.id && req.senderid === user.uid
-                      ).id
-                    )
-                  }
-                >
-                  Cancel Requset
-                </button>
-              ) : (
-                <button type="button" onClick={() => handleSentRequest(item)}>
-                  Sent Request
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     </>
   );

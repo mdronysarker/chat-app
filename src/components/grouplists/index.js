@@ -161,7 +161,8 @@ const Grouplist = () => {
                         cancelreq.find(
                           (req) =>
                             req.adminid === item.adminId &&
-                            req.userid === user.uid
+                            req.userid === user.uid &&
+                            req.groupid === item.id
                         ).id
                       )
                     }
