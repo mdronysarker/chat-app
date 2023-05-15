@@ -126,6 +126,7 @@ const Userlists = () => {
     // console.log(id);
   };
 
+  // For search
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
     searchQueryRef.current = e.target.value;

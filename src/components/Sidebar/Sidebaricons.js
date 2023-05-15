@@ -3,23 +3,24 @@ import { AiOutlineHome } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiOutlineSetting } from "react-icons/ai";
+import { Link, NavLink } from "react-router-dom";
 
 const Sidebaricons = () => {
   return (
     <>
       <div className="icons">
-        <div className="sidebar_icon">
+        <NavLink className="sidebar_icon" to={"/"}>
           <AiOutlineHome />
-        </div>
-        <div className="sidebar_icon">
+        </NavLink>
+        <NavLink className="sidebar_icon" to={"/message"}>
           <FaComment />
-        </div>
-        <div className="sidebar_icon">
+        </NavLink>
+        <NavLink className="sidebar_icon" to={"/notification"}>
           <IoMdNotificationsOutline />
-        </div>
-        <div className="sidebar_icon">
+        </NavLink>
+        <NavLink className="sidebar_icon" to={"/text"}>
           <AiOutlineSetting />
-        </div>
+        </NavLink>
       </div>
     </>
   );

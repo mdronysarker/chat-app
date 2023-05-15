@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Registration from "./pages/Registration";
 import Loggedinuser from "./Privaterouter/Loggedin";
 import Notloggedinuser from "./Privaterouter/Notloggedin";
+import Message from "./pages/Message";
 
 function App() {
   const router = createBrowserRouter(
@@ -19,6 +20,7 @@ function App() {
         <Route element={<Loggedinuser />}>
           <Route element={<Rootlayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/message" element={<Message />} />
           </Route>
         </Route>
         <Route element={<Notloggedinuser />}>

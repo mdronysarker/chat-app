@@ -66,7 +66,7 @@
   z-index: 1;
 }
 
-.sidebar_icon::after {
+.sidebar_icon.active::after {
   z-index: -1;
   position: absolute;
   content: "";
@@ -78,10 +78,10 @@
   background-color: #fff;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  opacity: 0;
+  opacity: 1;
 }
 
-.sidebar_icon::before {
+.sidebar_icon.active::before {
   position: absolute;
   content: "";
   top: 50%;
@@ -92,7 +92,7 @@
   background-color: var(--primary-color);
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  opacity: 0;
+  opacity: 1;
 }
 
 .sidebar_icon svg {
@@ -102,6 +102,10 @@
 
 .sidebar_icon svg path {
   fill: #fff;
+}
+
+.sidebar_icon.active svg path {
+  fill: var(--primary-color);
 }
 
 .logout {
