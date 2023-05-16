@@ -39,7 +39,7 @@ const Friend = () => {
     });
   }, [db, user.uid]);
 
-  console.log(friend);
+  // console.log(friend);
 
   // BlockList
   const handleBlock = (data) => {
