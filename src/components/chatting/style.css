@@ -1,0 +1,158 @@
+.chatting-box {
+  height: 100vh;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 25px 50px;
+  box-sizing: border-box;
+}
+
+.active_user_status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 15px;
+}
+
+.user_image {
+  display: flex;
+  width: 50%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image {
+  width: 75px;
+  height: 75px;
+  background-color: black;
+  border-radius: 50%;
+  position: relative;
+}
+
+.image::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  background-color: var(--green);
+  border-radius: 50%;
+  border: 5px solid white;
+}
+
+.info {
+  width: 80%;
+}
+
+.info h4 {
+  font-family: var(--primary-font);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.info span {
+  font-family: var(--secondary-font);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.message {
+  padding: 20px 100px;
+  overflow-y: auto;
+  height: 80vh;
+}
+
+.left_masg {
+  margin-bottom: 20px;
+}
+
+.left_masg .left_text {
+  background-color: #f1f1f1;
+  display: inline-block;
+  padding: 14px 10px;
+  max-width: 500px;
+  border-radius: 10px;
+  position: relative;
+}
+
+.left_masg .left_text::after {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: -9px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 20px 10px;
+  border-color: transparent transparent #f1f1f1 transparent;
+}
+
+.left_text p {
+  font-family: var(--primary-font);
+  font-size: 14px;
+  font-weight: 400;
+  color: black;
+}
+
+.left_masg span {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  color: #bbbbbb;
+  margin-top: 8px;
+}
+
+.right_masg {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.right_masg .right_text {
+  background-color: var(--primary-color);
+  display: inline-block;
+  padding: 14px 10px;
+  max-width: 500px;
+  border-radius: 10px;
+  position: relative;
+  text-align: start;
+}
+
+.right_masg .right_text::after {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  right: -9px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 10px 20px 10px;
+  border-color: transparent transparent var(--primary-color) transparent;
+}
+
+.right_text p {
+  font-family: var(--primary-font);
+  font-size: 14px;
+  font-weight: 400;
+  color: white;
+}
+
+.right_masg span {
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  color: #bbbbbb;
+  margin-top: 8px;
+}
+
+.left_masg .left_image {
+  width: 400px;
+  overflow: hidden;
+}
+
+.left_masg .left_image img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}

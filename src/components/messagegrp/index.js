@@ -1,5 +1,6 @@
 import { getDatabase, onValue, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
+import "./style.css";
 
 const Masggrp = () => {
   const [groupLists, setGroupLists] = useState([]);
@@ -29,7 +30,6 @@ const Masggrp = () => {
           <div className="masggrp-item-wrraper" key={i}>
             <div className="masggrp-images"></div>
             <div className="masggrp-names">
-              <span>Admin: {item.adminName}</span>
               <h4>{item.groupName}</h4>
               <span>{item.groupTag}</span>
             </div>
