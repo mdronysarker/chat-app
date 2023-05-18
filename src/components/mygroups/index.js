@@ -126,18 +126,16 @@ const Mygroups = () => {
                 <h4>{item.groupName}</h4>
                 <span>{item.groupTag}</span>
               </div>
-              <div>
-                <Button
+              <div className="mygroups_btn">
+                <button
                   variant="contained"
                   onClick={() => handleMemberShow(item)}
                 >
                   Info
-                </Button>
-              </div>
-              <div>
-                <Button variant="contained" onClick={() => handleReqOpen(item)}>
+                </button>
+                <button variant="contained" onClick={() => handleReqOpen(item)}>
                   Request
-                </Button>
+                </button>
               </div>
               <Modal
                 open={open}

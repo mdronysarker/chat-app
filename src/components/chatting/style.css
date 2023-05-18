@@ -1,5 +1,5 @@
 .chatting-box {
-  height: 100vh;
+  height: 98vh;
   width: 100%;
   background-color: white;
   border-radius: 8px;
@@ -61,7 +61,7 @@
 .message {
   padding: 20px 100px;
   overflow-y: auto;
-  height: 80vh;
+  height: 60vh;
 }
 
 .left_masg {
@@ -102,6 +102,17 @@
   font-weight: 400;
   color: #bbbbbb;
   margin-top: 8px;
+}
+
+.left_masg .left_image {
+  width: 400px;
+  overflow: hidden;
+}
+
+.left_masg .left_image img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .right_masg {
@@ -146,13 +157,46 @@
   margin-top: 8px;
 }
 
-.left_masg .left_image {
+.right_masg .right_image {
   width: 400px;
   overflow: hidden;
+  margin-left: auto;
 }
 
-.left_masg .left_image img {
+.right_masg .right_image img {
   width: 100%;
   object-fit: cover;
   border-radius: 10px;
+}
+
+.__react_modal_image__medium_img {
+  width: 40% !important;
+  height: 100% !important;
+}
+
+.message-inputs {
+  padding-top: 40px;
+  border-top: 1px solid red;
+  margin-top: 20px;
+  display: flex;
+}
+
+.text-inputs {
+  padding: 25px 20px;
+  background-color: #f1f1f1;
+  width: 80%;
+  border-radius: 10px;
+}
+
+.message-inputs input {
+  width: 80%;
+  background-color: #f1f1f1;
+  border: none;
+  outline: none;
+}
+
+.telegram {
+  width: 15%;
+  padding: 0;
+  font-size: 30px;
 }

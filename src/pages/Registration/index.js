@@ -208,7 +208,7 @@ const Registration = () => {
                       className="button"
                       variant="contained"
                     >
-                      <DotLoader size={"30px"} />
+                      <DotLoader size={"20px"} />
                     </Button>
                   ) : (
                     <Button

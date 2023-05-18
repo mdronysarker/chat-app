@@ -3,7 +3,7 @@ import { AiOutlineHome } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { AiOutlineSetting } from "react-icons/ai";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Sidebaricons = () => {
   return (
