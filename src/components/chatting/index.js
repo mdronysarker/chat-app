@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ModalImage from "react-modal-image";
 import "./style.css";
@@ -10,6 +10,9 @@ import { FaRegSave } from "react-icons/fa";
 import { AiOutlinePrinter } from "react-icons/ai";
 import { HiOutlineCamera } from "react-icons/hi";
 import { FaTelegram } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
+import Camera from "react-html5-camera-photo";
+import "react-html5-camera-photo/build/css/index.css";
 
 const actions = [
   { icon: <GrGallery />, name: "Gallery" },
@@ -19,6 +22,24 @@ const actions = [
 ];
 
 const Chatting = () => {
+  const [showCamera, setShowCamera] = useState(false);
+  const chooseFile = useRef();
+
+  const showMorefundamantal = (name) => {
+    if (name === "Camera") {
+      setShowCamera(true);
+    } else if (name === "Gallery") {
+      chooseFile.current.click();
+      // console.log("gallery");
+    }
+  };
+
+  // for cmera
+  function handleTakePhoto(dataUri) {
+    // Do stuff with the photo...
+    console.log("takePhoto");
+  }
+
   return (
     <>
       <div className="chatting-box">
@@ -34,6 +55,16 @@ const Chatting = () => {
             <BsThreeDotsVertical />
           </div>
         </div>
+        {showCamera && (
+          <div className="open-camera">
+            <RxCross2 onClick={() => setShowCamera(false)} />
+            <Camera
+              onTakePhoto={(dataUri) => {
+                handleTakePhoto(dataUri);
+              }}
+            />
+          </div>
+        )}
         <div className="message">
           {/* Left message start */}
           <div className="left_masg">
@@ -113,11 +144,13 @@ const Chatting = () => {
                 <SpeedDialAction
                   key={action.name}
                   icon={action.icon}
+                  onClick={() => showMorefundamantal(action.name)}
                   tooltipTitle={action.name}
                 />
               ))}
             </SpeedDial>
           </div>
+          <input hidden type="file" ref={chooseFile} />
           <button className="telegram" type="submit">
             <FaTelegram />
           </button>
