@@ -93,6 +93,7 @@ const Grouplist = () => {
     onValue(starCountRef, (snapshot) => {
       const reqarr = [];
       snapshot.forEach((item) => {
+        // console.log(item.val());
         reqarr.push(
           item.val().adminid + item.val().userid + item.val().groupid
         );
