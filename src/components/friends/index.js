@@ -8,13 +8,15 @@ import {
   remove,
 } from "firebase/database";
 import "./style.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { activeChat } from "../../features/Slice/activeSingleSlice";
 
 const Friend = () => {
   const [friend, setFriend] = useState([]);
 
   const db = getDatabase();
   const user = useSelector((users) => users.login.loggedIn);
+  const dispatch = useDispatch();
   // console.log(user);
 
   // Show friend
@@ -75,6 +77,31 @@ const Friend = () => {
     remove(ref(db, "friends/" + data.id));
   };
 
+  //ActiveSingle for
+
+  const handleActiveSingle = (item) => {
+    if (item.reciverid === user.uid) {
+      dispatch(
+        activeChat({
+          status: "single",
+          id: item.senderid,
+          name: item.sendername,
+        })
+      );
+
+      localStorage.setItem("sigles", JSON.stringify(item));
+    } else {
+      dispatch(
+        activeChat({
+          status: "single",
+          id: item.reciverid,
+          name: item.recivername,
+        })
+      );
+      localStorage.setItem("singles", JSON.stringify(item));
+    }
+  };
+
   return (
     <>
       <div className="friends">
@@ -82,7 +109,11 @@ const Friend = () => {
           <h4>Friends</h4>
         </div>
         {friend.map((item, i) => (
-          <div className="friend-item-wrraper" key={i}>
+          <div
+            className="friend-item-wrraper"
+            key={i}
+            onClick={() => handleActiveSingle(item)}
+          >
             <div className="friend-images">
               {user.uid === item.reciverid ? (
                 <picture>

@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const ActiveSingleSlice = createSlice({
+export const activeChatSlice = createSlice({
   name: "single",
   initialState: {
-    active: "mern 2202",
+    active: localStorage.getItem("singles")
+      ? JSON.parse(localStorage.getItem("singles"))
+      : null,
   },
 
   reducers: {
-    Activesingle: (state, action) => {
+    activeChat: (state, action) => {
       state.active = action.payload;
     },
   },
 });
 
-export const { Activesingle } = ActiveSingleSlice.actions;
-export default ActiveSingleSlice.reducer;
+export const { activeChat } = activeChatSlice.actions;
+export default activeChatSlice.reducer;

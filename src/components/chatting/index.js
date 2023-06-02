@@ -13,6 +13,7 @@ import { FaTelegram } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
+import { useSelector } from "react-redux";
 
 const actions = [
   { icon: <GrGallery />, name: "Gallery" },
@@ -24,6 +25,8 @@ const actions = [
 const Chatting = () => {
   const [showCamera, setShowCamera] = useState(false);
   const chooseFile = useRef();
+
+  const activeChatname = useSelector((active) => active.active.active);
 
   const showMorefundamantal = (name) => {
     if (name === "Camera") {
@@ -47,7 +50,7 @@ const Chatting = () => {
           <div className="user_image">
             <div className="image"></div>
             <div className="info">
-              <h4>Rony Sarker</h4>
+              <h4>{activeChatname.name ? activeChatname.name : ""}</h4>
               <span>Online</span>
             </div>
           </div>
