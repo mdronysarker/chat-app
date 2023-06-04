@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import ModalImage from "react-modal-image";
 import "./style.css";
@@ -14,6 +14,8 @@ import { RxCross2 } from "react-icons/rx";
 import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import { useSelector } from "react-redux";
+import { getDatabase, onValue, push, ref, set } from "firebase/database";
+import moment from "moment/moment";
 
 const actions = [
   { icon: <GrGallery />, name: "Gallery" },
@@ -25,8 +27,13 @@ const actions = [
 const Chatting = () => {
   const [showCamera, setShowCamera] = useState(false);
   const chooseFile = useRef();
+  const [sendMasg, setSendMasg] = useState("");
+  const [singleMasgList, setSingleMasgList] = useState([]);
+
+  const db = getDatabase();
 
   const activeChatname = useSelector((active) => active.active.active);
+  const user = useSelector((users) => users.login.loggedIn);
 
   const showMorefundamantal = (name) => {
     if (name === "Camera") {
@@ -43,6 +50,46 @@ const Chatting = () => {
     console.log("takePhoto");
   }
 
+  // For message send
+  const handleSubmit = () => {
+    if (activeChatname?.status === "single") {
+      set(push(ref(db, "singlemasg")), {
+        whosendId: user.uid,
+        whosendName: user.displayName,
+        whorecevieId: activeChatname.id,
+        whorecevieName: activeChatname.name,
+        masg: sendMasg,
+        date: `${new Date().getFullYear()} - ${
+          new Date().getMonth() + 1
+        } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+      });
+    } else {
+      console.log("nai");
+    }
+  };
+
+  // Read single message
+
+  useEffect(() => {
+    const starCountRef = ref(db, "singlemasg");
+    onValue(starCountRef, (snapshot) => {
+      const singlechat = [];
+      snapshot.forEach((item) => {
+        if (
+          (item.val().whosendId === user.uid &&
+            item.val().whorecevieId === activeChatname.id) ||
+          (item.val().whorecevieId === user.uid &&
+            item.val().whosendId === activeChatname.id)
+        ) {
+          singlechat.push(item.val());
+        }
+      });
+      setSingleMasgList(singlechat);
+    });
+  }, [db, user.uid, activeChatname.id]);
+
+  // console.log(singleMasgList);
+
   return (
     <>
       <div className="chatting-box">
@@ -50,7 +97,7 @@ const Chatting = () => {
           <div className="user_image">
             <div className="image"></div>
             <div className="info">
-              <h4>{activeChatname.name ? activeChatname.name : ""}</h4>
+              <h4>{activeChatname?.name}</h4>
               <span>Online</span>
             </div>
           </div>
@@ -69,33 +116,58 @@ const Chatting = () => {
           </div>
         )}
         <div className="message">
+          {activeChatname.status === "single"
+            ? singleMasgList.map((item, i) =>
+                item.whosendId === user.uid ? (
+                  item.masg ? (
+                    <>
+                      <div className="right_masg">
+                        <div className="right_text">
+                          <p>{item.masg}</p>
+                        </div>
+                        <span>
+                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    "nai"
+                  )
+                ) : item.masg ? (
+                  <>
+                    <div className="left_masg">
+                      <div className="left_text">
+                        <p>{item.masg}</p>
+                      </div>
+                      <span>
+                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  "nai"
+                )
+              )
+            : "grp masr"}
           {/* Left message start */}
-          <div className="left_masg">
+          {/* <div className="left_masg">
             <div className="left_text">
               <p>Hello, Bro How are You?</p>
             </div>
             <span>Today, 2:01pm</span>
-          </div>
+          </div> */}
           {/* left masg end */}
           {/* Right masg start */}
-          <div className="right_masg">
+          {/* <div className="right_masg">
             <div className="right_text">
               <p>I'm Fine . Thank You</p>
             </div>
             <span>Today, 2:01pm</span>
-          </div>
-          <div className="right_masg">
-            <div className="right_text">
-              <p>
-                Hey What's Your work progress. Please give me the final update.
-                I want to show the work
-              </p>
-            </div>
-            <span>Today, 2:01pm</span>
-          </div>
+          </div> */}
+
           {/* Right masg end */}
           {/* Left message start */}
-          <div className="left_masg">
+          {/* <div className="left_masg">
             <div className="left_image">
               <ModalImage
                 small={"./images/demo.jpg"}
@@ -103,10 +175,10 @@ const Chatting = () => {
               />
             </div>
             <span>Today, 2:01pm</span>
-          </div>
+          </div> */}
           {/* left masg end */}
           {/* right message start */}
-          <div className="right_masg">
+          {/* <div className="right_masg">
             <div className="right_image">
               <ModalImage
                 small={"./images/demo.jpg"}
@@ -114,30 +186,30 @@ const Chatting = () => {
               />
             </div>
             <span>Today, 3:01pm</span>
-          </div>
+          </div> */}
           {/* left masg end */}
           {/* right message start */}
-          <div className="right_masg">
+          {/* <div className="right_masg">
             <audio controls></audio>
             <span>Today, 3:01pm</span>
-          </div>
+          </div> */}
           {/* right masg end */}
           {/* left message start */}
-          <div className="left_masg">
+          {/* <div className="left_masg">
             <audio controls></audio>
             <span>Today, 3:01pm</span>
-          </div>
+          </div> */}
           {/* left masg end */}
           {/* left message start */}
-          <div className="left_masg">
+          {/* <div className="left_masg">
             <video controls></video>
             <span>Today, 3:01pm</span>
-          </div>
+          </div> */}
           {/* left masg end */}
         </div>
         <div className="message-inputs">
           <div className="text-inputs">
-            <input type="text" />
+            <input type="text" onChange={(e) => setSendMasg(e.target.value)} />
             <SpeedDial
               ariaLabel="SpeedDial basic example"
               sx={{ position: "absolute", bottom: 23, right: 195 }}
@@ -154,7 +226,7 @@ const Chatting = () => {
             </SpeedDial>
           </div>
           <input hidden type="file" ref={chooseFile} />
-          <button className="telegram" type="submit">
+          <button className="telegram" type="submit" onClick={handleSubmit}>
             <FaTelegram />
           </button>
         </div>
