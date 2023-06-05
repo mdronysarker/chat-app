@@ -15,6 +15,12 @@ import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import { useSelector } from "react-redux";
 import { getDatabase, onValue, push, ref, set } from "firebase/database";
+import {
+  getStorage,
+  ref as sref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import moment from "moment/moment";
 
 const actions = [
@@ -31,6 +37,7 @@ const Chatting = () => {
   const [singleMasgList, setSingleMasgList] = useState([]);
 
   const db = getDatabase();
+  const storage = getStorage();
 
   const activeChatname = useSelector((active) => active.active.active);
   const user = useSelector((users) => users.login.loggedIn);
@@ -89,6 +96,47 @@ const Chatting = () => {
   }, [db, user.uid, activeChatname.id]);
 
   // console.log(singleMasgList);
+
+  // send image in chat box
+  const handleUploadImage = (e) => {
+    const file = e.target.files;
+    const storageRef = ref(storage, file);
+
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    // Register three observers:
+    // 1. 'state_changed' observer, called any time the state changes
+    // 2. Error observer, called on failure
+    // 3. Completion observer, called on successful completion
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        // Handle unsuccessful uploads
+      },
+      () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+        });
+      }
+    );
+  };
 
   return (
     <>
@@ -149,63 +197,6 @@ const Chatting = () => {
                 )
               )
             : "grp masr"}
-          {/* Left message start */}
-          {/* <div className="left_masg">
-            <div className="left_text">
-              <p>Hello, Bro How are You?</p>
-            </div>
-            <span>Today, 2:01pm</span>
-          </div> */}
-          {/* left masg end */}
-          {/* Right masg start */}
-          {/* <div className="right_masg">
-            <div className="right_text">
-              <p>I'm Fine . Thank You</p>
-            </div>
-            <span>Today, 2:01pm</span>
-          </div> */}
-
-          {/* Right masg end */}
-          {/* Left message start */}
-          {/* <div className="left_masg">
-            <div className="left_image">
-              <ModalImage
-                small={"./images/demo.jpg"}
-                large={"./images/demo.jpg"}
-              />
-            </div>
-            <span>Today, 2:01pm</span>
-          </div> */}
-          {/* left masg end */}
-          {/* right message start */}
-          {/* <div className="right_masg">
-            <div className="right_image">
-              <ModalImage
-                small={"./images/demo.jpg"}
-                medium={"./images/demo.jpg"}
-              />
-            </div>
-            <span>Today, 3:01pm</span>
-          </div> */}
-          {/* left masg end */}
-          {/* right message start */}
-          {/* <div className="right_masg">
-            <audio controls></audio>
-            <span>Today, 3:01pm</span>
-          </div> */}
-          {/* right masg end */}
-          {/* left message start */}
-          {/* <div className="left_masg">
-            <audio controls></audio>
-            <span>Today, 3:01pm</span>
-          </div> */}
-          {/* left masg end */}
-          {/* left message start */}
-          {/* <div className="left_masg">
-            <video controls></video>
-            <span>Today, 3:01pm</span>
-          </div> */}
-          {/* left masg end */}
         </div>
         <div className="message-inputs">
           <div className="text-inputs">
@@ -225,7 +216,12 @@ const Chatting = () => {
               ))}
             </SpeedDial>
           </div>
-          <input hidden type="file" ref={chooseFile} />
+          <input
+            hidden
+            type="file"
+            ref={chooseFile}
+            onClick={handleUploadImage}
+          />
           <button className="telegram" type="submit" onClick={handleSubmit}>
             <FaTelegram />
           </button>
