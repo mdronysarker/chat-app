@@ -18,9 +18,10 @@ import { getDatabase, onValue, push, ref, set } from "firebase/database";
 import {
   getStorage,
   ref as sref,
-  uploadBytesResumable,
+  uploadString,
   getDownloadURL,
 } from "firebase/storage";
+
 import moment from "moment/moment";
 
 const actions = [
@@ -35,6 +36,7 @@ const Chatting = () => {
   const chooseFile = useRef();
   const [sendMasg, setSendMasg] = useState("");
   const [singleMasgList, setSingleMasgList] = useState([]);
+  const [captureImage, setCaptureImage] = useState("");
 
   const db = getDatabase();
   const storage = getStorage();
@@ -53,9 +55,27 @@ const Chatting = () => {
 
   // for cmera
   function handleTakePhoto(dataUri) {
-    // Do stuff with the photo...
-    console.log("takePhoto");
+    setCaptureImage(dataUri);
+    const storageRef = sref(storage, "hola");
+    uploadString(storageRef, dataUri, "data_url").then((snapshot) => {
+      getDownloadURL(storageRef).then((downloadURL) => {
+        set(push(ref(db, "singlemasg")), {
+          whosendId: user.uid,
+          whosendName: user.displayName,
+          whorecevieId: activeChatname.id,
+          whorecevieName: activeChatname.name,
+          img: dataUri,
+          date: `${new Date().getFullYear()} - ${
+            new Date().getMonth() + 1
+          } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+        }).then(() => {
+          setShowCamera(false);
+        });
+      });
+    });
   }
+
+  // console.log(captureImage, "ronby");
 
   // For message send
   const handleSubmit = () => {
@@ -97,46 +117,39 @@ const Chatting = () => {
 
   // console.log(singleMasgList);
 
-  // send image in chat box
-  const handleUploadImage = (e) => {
-    const file = e.target.files;
-    const storageRef = ref(storage, file);
+  // // send image in chat box
+  // const handleUploadImage = (e) => {
+  //   const file = e.target.files[0];
+  //   const storageRef = sref(storage, file.name);
 
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  //   const uploadTask = uploadBytesResumable(storageRef, file);
 
-    // Register three observers:
-    // 1. 'state_changed' observer, called any time the state changes
-    // 2. Error observer, called on failure
-    // 3. Completion observer, called on successful completion
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-        switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
-            break;
-          case "running":
-            console.log("Upload is running");
-            break;
-        }
-      },
-      (error) => {
-        // Handle unsuccessful uploads
-      },
-      () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-        });
-      }
-    );
-  };
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {
+  //       const progress =
+  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  //       console.log("Upload is " + progress + "% done");
+  //       switch (snapshot.state) {
+  //         case "paused":
+  //           console.log("Upload is paused");
+  //           break;
+  //         case "running":
+  //           console.log("Upload is running");
+  //           break;
+  //       }
+  //     },
+  //     (error) => {
+  //       console.log(error.code);
+  //     },
+  //     () => {
+  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //         console.log("File available at", downloadURL);
+  //         // Update your state or perform additional actions with the downloadURL
+  //       });
+  //     }
+  //   );
+  // };
 
   return (
     <>
@@ -179,7 +192,12 @@ const Chatting = () => {
                       </div>
                     </>
                   ) : (
-                    "nai"
+                    <div className="right_masg">
+                      <div className="right_image">
+                        <ModalImage small={item.img} medium={item.img} />
+                      </div>
+                      <span>Today, 3:01pm</span>
+                    </div>
                   )
                 ) : item.masg ? (
                   <>
@@ -193,7 +211,12 @@ const Chatting = () => {
                     </div>
                   </>
                 ) : (
-                  "nai"
+                  <div className="left_masg">
+                    <div className="left_image">
+                      <ModalImage small={item.img} medium={item.img} />
+                    </div>
+                    <span>Today, 3:01pm</span>
+                  </div>
                 )
               )
             : "grp masr"}
@@ -220,7 +243,7 @@ const Chatting = () => {
             hidden
             type="file"
             ref={chooseFile}
-            onClick={handleUploadImage}
+            // onClick={handleUploadImage}
           />
           <button className="telegram" type="submit" onClick={handleSubmit}>
             <FaTelegram />
