@@ -61,9 +61,29 @@ const Uploadpicture = ({ setOpen }) => {
     }
   };
 
+  // For handledargover
+
+  const handleDargOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  };
+
+  // For handle drop
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    handleUpdateProfile(e);
+  };
+
   return (
     <>
-      <div className="upload_box ">
+      <div
+        className="upload_box "
+        onDragOver={handleDargOver}
+        onDragEnter={handleDargOver}
+        onDragLeave={handleDargOver}
+        onDrop={handleDrop}
+      >
         <input
           type="file"
           hidden
