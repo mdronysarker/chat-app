@@ -23,6 +23,7 @@ import {
 } from "firebase/storage";
 
 import moment from "moment/moment";
+import { v4 as uuidv4 } from "uuid";
 
 const actions = [
   { icon: <GrGallery />, name: "Gallery" },
@@ -56,7 +57,10 @@ const Chatting = () => {
   // for cmera
   function handleTakePhoto(dataUri) {
     setCaptureImage(dataUri);
-    const storageRef = sref(storage, "hola");
+    const storageRef = sref(
+      storage,
+      `captureSendImage/ ${user.displayName} = ${user.uid}/ ${uuidv4()}`
+    );
     uploadString(storageRef, dataUri, "data_url").then((snapshot) => {
       getDownloadURL(storageRef).then((downloadURL) => {
         set(push(ref(db, "singlemasg")), {
