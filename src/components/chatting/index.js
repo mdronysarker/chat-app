@@ -125,7 +125,10 @@ const Chatting = () => {
   // send image in chat box
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
-    const storageRef = sref(storage, file.name);
+    const storageRef = sref(
+      storage,
+      `uploadSendImage/ ${user.displayName} = ${user.uid}/ ${uuidv4()}`
+    );
 
     const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -154,6 +157,27 @@ const Chatting = () => {
         });
       }
     );
+  };
+
+  // Message will be send with enter
+
+  const handleEnterPress = (e) => {
+    if (e.key === "Enter") {
+      if (activeChatname?.status === "single") {
+        set(push(ref(db, "singlemasg")), {
+          whosendId: user.uid,
+          whosendName: user.displayName,
+          whorecevieId: activeChatname.id,
+          whorecevieName: activeChatname.name,
+          masg: sendMasg,
+          date: `${new Date().getFullYear()} - ${
+            new Date().getMonth() + 1
+          } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+        });
+      } else {
+        console.log("nai");
+      }
+    }
   };
 
   return (
@@ -201,7 +225,9 @@ const Chatting = () => {
                       <div className="right_image">
                         <ModalImage small={item.img} medium={item.img} />
                       </div>
-                      <span>Today, 3:01pm</span>
+                      <span>
+                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                      </span>
                     </div>
                   )
                 ) : item.masg ? (
@@ -220,7 +246,7 @@ const Chatting = () => {
                     <div className="left_image">
                       <ModalImage small={item.img} medium={item.img} />
                     </div>
-                    <span>Today, 3:01pm</span>
+                    <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
                   </div>
                 )
               )
@@ -228,7 +254,11 @@ const Chatting = () => {
         </div>
         <div className="message-inputs">
           <div className="text-inputs">
-            <input type="text" onChange={(e) => setSendMasg(e.target.value)} />
+            <input
+              type="text"
+              onKeyUp={handleEnterPress}
+              onChange={(e) => setSendMasg(e.target.value)}
+            />
             <SpeedDial
               ariaLabel="SpeedDial basic example"
               sx={{ position: "absolute", bottom: 23, right: 195 }}
