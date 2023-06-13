@@ -19,6 +19,7 @@ import {
   getStorage,
   ref as sref,
   uploadString,
+  uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
 
@@ -121,39 +122,39 @@ const Chatting = () => {
 
   // console.log(singleMasgList);
 
-  // // send image in chat box
-  // const handleUploadImage = (e) => {
-  //   const file = e.target.files[0];
-  //   const storageRef = sref(storage, file.name);
+  // send image in chat box
+  const handleUploadImage = (e) => {
+    const file = e.target.files[0];
+    const storageRef = sref(storage, file.name);
 
-  //   const uploadTask = uploadBytesResumable(storageRef, file);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       const progress =
-  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       console.log("Upload is " + progress + "% done");
-  //       switch (snapshot.state) {
-  //         case "paused":
-  //           console.log("Upload is paused");
-  //           break;
-  //         case "running":
-  //           console.log("Upload is running");
-  //           break;
-  //       }
-  //     },
-  //     (error) => {
-  //       console.log(error.code);
-  //     },
-  //     () => {
-  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //         console.log("File available at", downloadURL);
-  //         // Update your state or perform additional actions with the downloadURL
-  //       });
-  //     }
-  //   );
-  // };
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        console.log(error.code);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          set(push(ref(db, "singlemasg")), {
+            whosendId: user.uid,
+            whosendName: user.displayName,
+            whorecevieId: activeChatname.id,
+            whorecevieName: activeChatname.name,
+            img: downloadURL,
+            date: `${new Date().getFullYear()} - ${
+              new Date().getMonth() + 1
+            } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+          });
+        });
+      }
+    );
+  };
 
   return (
     <>
@@ -247,7 +248,7 @@ const Chatting = () => {
             hidden
             type="file"
             ref={chooseFile}
-            // onClick={handleUploadImage}
+            onChange={handleUploadImage}
           />
           <button className="telegram" type="submit" onClick={handleSubmit}>
             <FaTelegram />
