@@ -94,6 +94,9 @@ const Chatting = () => {
         date: `${new Date().getFullYear()} - ${
           new Date().getMonth() + 1
         } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+      }).then(() => {
+        // console.log("rony hiii");
+        setSendMasg("");
       });
     } else {
       console.log("nai");
@@ -173,6 +176,9 @@ const Chatting = () => {
           date: `${new Date().getFullYear()} - ${
             new Date().getMonth() + 1
           } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+        }).then(() => {
+          // console.log("rony hiii");
+          setSendMasg("");
         });
       } else {
         console.log("nai");
@@ -257,6 +263,7 @@ const Chatting = () => {
             <input
               type="text"
               onKeyUp={handleEnterPress}
+              value={sendMasg}
               onChange={(e) => setSendMasg(e.target.value)}
             />
             <SpeedDial
