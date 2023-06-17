@@ -11,6 +11,8 @@ import { AiOutlinePrinter } from "react-icons/ai";
 import { HiOutlineCamera } from "react-icons/hi";
 import { FaTelegram } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Camera from "react-html5-camera-photo";
 import "react-html5-camera-photo/build/css/index.css";
 import { useSelector } from "react-redux";
@@ -25,6 +27,7 @@ import {
 
 import moment from "moment/moment";
 import { v4 as uuidv4 } from "uuid";
+import { AudioRecorder } from "react-audio-voice-recorder";
 
 const actions = [
   { icon: <GrGallery />, name: "Gallery" },
@@ -39,11 +42,16 @@ const Chatting = () => {
   const [sendMasg, setSendMasg] = useState("");
   const [singleMasgList, setSingleMasgList] = useState([]);
   const [captureImage, setCaptureImage] = useState("");
+  const [audioUrl, setAudioUrl] = useState("");
+  const [blob, setBlob] = useState("");
+  const [showAudio, setShowAudio] = useState(false);
 
   const db = getDatabase();
   const storage = getStorage();
 
   const activeChatname = useSelector((active) => active.active.active);
+  // console.log(activeChatname);
+
   const user = useSelector((users) => users.login.loggedIn);
 
   const showMorefundamantal = (name) => {
@@ -186,6 +194,18 @@ const Chatting = () => {
     }
   };
 
+  // For audio message
+
+  const addAudioElement = (blob) => {
+    const url = URL.createObjectURL(blob);
+    setAudioUrl(url);
+    setBlob(blob);
+    // const audio = document.createElement("audio");
+    // audio.src = url;
+    // audio.controls = true;
+    // document.body.appendChild(audio);
+  };
+
   return (
     <>
       <div className="chatting-box">
@@ -258,39 +278,68 @@ const Chatting = () => {
               )
             : "grp masr"}
         </div>
+
         <div className="message-inputs">
-          <div className="text-inputs">
-            <input
-              type="text"
-              onKeyUp={handleEnterPress}
-              value={sendMasg}
-              onChange={(e) => setSendMasg(e.target.value)}
-            />
-            <SpeedDial
-              ariaLabel="SpeedDial basic example"
-              sx={{ position: "absolute", bottom: 23, right: 195 }}
-              icon={<SpeedDialIcon />}
-            >
-              {actions.map((action) => (
-                <SpeedDialAction
-                  key={action.name}
-                  icon={action.icon}
-                  onClick={() => showMorefundamantal(action.name)}
-                  tooltipTitle={action.name}
-                />
-              ))}
-            </SpeedDial>
-          </div>
+          {!showAudio && !audioUrl && (
+            <div className="text-inputs">
+              <input
+                type="text"
+                onKeyUp={handleEnterPress}
+                value={sendMasg}
+                onChange={(e) => setSendMasg(e.target.value)}
+              />
+              <SpeedDial
+                ariaLabel="SpeedDial basic example"
+                sx={{ position: "absolute", bottom: 23, right: 195 }}
+                icon={<SpeedDialIcon />}
+              >
+                {actions.map((action) => (
+                  <SpeedDialAction
+                    key={action.name}
+                    icon={action.icon}
+                    onClick={() => showMorefundamantal(action.name)}
+                    tooltipTitle={action.name}
+                  />
+                ))}
+              </SpeedDial>
+            </div>
+          )}
           <input
             hidden
             type="file"
             ref={chooseFile}
             onChange={handleUploadImage}
           />
-          <button className="telegram" type="submit" onClick={handleSubmit}>
-            <FaTelegram />
-          </button>
+          {!showAudio && !audioUrl && (
+            <button className="telegram" type="submit" onClick={handleSubmit}>
+              <FaTelegram />
+            </button>
+          )}
         </div>
+
+        <div onClick={() => setShowAudio(!showAudio)}>
+          <AudioRecorder
+            onRecordingComplete={(blob) => addAudioElement(blob)}
+            audioTrackConstraints={{
+              noiseSuppression: true,
+              echoCancellation: true,
+            }}
+            downloadOnSavePress={true}
+            downloadFileExtension="mp3"
+          />
+        </div>
+        {audioUrl && (
+          <div className="audio-sound">
+            <audio controls src={audioUrl}></audio>
+
+            <div className="voice-button" variant="contained">
+              <SendIcon />
+            </div>
+            <div className="voice-button" variant="contained">
+              <DeleteIcon />
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
