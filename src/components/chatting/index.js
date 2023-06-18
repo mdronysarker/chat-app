@@ -23,6 +23,7 @@ import {
   uploadString,
   uploadBytesResumable,
   getDownloadURL,
+  uploadBytes,
 } from "firebase/storage";
 
 import moment from "moment/moment";
@@ -77,7 +78,7 @@ const Chatting = () => {
           whosendName: user.displayName,
           whorecevieId: activeChatname.id,
           whorecevieName: activeChatname.name,
-          img: dataUri,
+          img: downloadURL,
           date: `${new Date().getFullYear()} - ${
             new Date().getMonth() + 1
           } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
@@ -129,11 +130,11 @@ const Chatting = () => {
       });
       setSingleMasgList(singlechat);
     });
-  }, [db, user.uid, activeChatname.id]);
+  }, [db, user.uid, activeChatname?.id]);
 
   // console.log(singleMasgList);
 
-  // send image in chat box
+  // send file in chat box
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
     const storageRef = sref(
@@ -200,10 +201,32 @@ const Chatting = () => {
     const url = URL.createObjectURL(blob);
     setAudioUrl(url);
     setBlob(blob);
-    // const audio = document.createElement("audio");
-    // audio.src = url;
-    // audio.controls = true;
-    // document.body.appendChild(audio);
+  };
+
+  // Send audio message
+
+  const handleAudioUpload = () => {
+    const audioStorageRef = sref(
+      storage,
+      `uploadAudio/ ${user.displayName} = ${user.uid}/ ${uuidv4()}`
+    );
+    // 'file' comes from the Blob or File API
+    uploadBytes(audioStorageRef, blob).then((snapshot) => {
+      getDownloadURL(audioStorageRef).then((downloadURL) => {
+        set(push(ref(db, "singlemasg")), {
+          whosendId: user.uid,
+          whosendName: user.displayName,
+          whorecevieId: activeChatname.id,
+          whorecevieName: activeChatname.name,
+          audio: downloadURL,
+          date: `${new Date().getFullYear()} - ${
+            new Date().getMonth() + 1
+          } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+        }).then(() => {
+          setAudioUrl("");
+        });
+      });
+    });
   };
 
   return (
@@ -232,7 +255,7 @@ const Chatting = () => {
           </div>
         )}
         <div className="message">
-          {activeChatname.status === "single"
+          {activeChatname?.status === "single"
             ? singleMasgList.map((item, i) =>
                 item.whosendId === user.uid ? (
                   item.masg ? (
@@ -246,11 +269,18 @@ const Chatting = () => {
                         </span>
                       </div>
                     </>
-                  ) : (
+                  ) : item.img ? (
                     <div className="right_masg">
                       <div className="right_image">
                         <ModalImage small={item.img} medium={item.img} />
                       </div>
+                      <span>
+                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="right_masg">
+                      <audio controls src={item.audio}></audio>
                       <span>
                         {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
                       </span>
@@ -267,12 +297,17 @@ const Chatting = () => {
                       </span>
                     </div>
                   </>
-                ) : (
+                ) : item.img ? (
                   <div className="left_masg">
                     <div className="left_image">
                       <ModalImage small={item.img} medium={item.img} />
                     </div>
                     <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
+                  </div>
+                ) : (
+                  <div className="left_masg">
+                    <audio controls src={item.audio}></audio>
+                    <span>Today, 3:01pm</span>
                   </div>
                 )
               )
@@ -332,10 +367,18 @@ const Chatting = () => {
           <div className="audio-sound">
             <audio controls src={audioUrl}></audio>
 
-            <div className="voice-button" variant="contained">
+            <div
+              className="voice-button"
+              variant="contained"
+              onClick={handleAudioUpload}
+            >
               <SendIcon />
             </div>
-            <div className="voice-button" variant="contained">
+            <div
+              className="voice-button"
+              variant="contained"
+              onClick={() => setAudioUrl("")}
+            >
               <DeleteIcon />
             </div>
           </div>
