@@ -11,6 +11,7 @@ import { AiOutlinePrinter } from "react-icons/ai";
 import { HiOutlineCamera } from "react-icons/hi";
 import { FaTelegram } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import { BsEmojiSmile } from "react-icons/bs";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Camera from "react-html5-camera-photo";
@@ -29,6 +30,7 @@ import {
 import moment from "moment/moment";
 import { v4 as uuidv4 } from "uuid";
 import { AudioRecorder } from "react-audio-voice-recorder";
+import EmojiPicker from "emoji-picker-react";
 
 const actions = [
   { icon: <GrGallery />, name: "Gallery" },
@@ -46,6 +48,7 @@ const Chatting = () => {
   const [audioUrl, setAudioUrl] = useState("");
   const [blob, setBlob] = useState("");
   const [showAudio, setShowAudio] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
 
   const db = getDatabase();
   const storage = getStorage();
@@ -229,6 +232,14 @@ const Chatting = () => {
     });
   };
 
+  // For emoji
+
+  const handleEmojiSelect = (emoji) => {
+    setSendMasg(sendMasg + emoji.emoji).then(() => {
+      setShowEmoji(false);
+    });
+  };
+
   return (
     <>
       <div className="chatting-box">
@@ -323,6 +334,15 @@ const Chatting = () => {
                 value={sendMasg}
                 onChange={(e) => setSendMasg(e.target.value)}
               />
+
+              <div className="emoji" onClick={() => setShowEmoji(!showEmoji)}>
+                <BsEmojiSmile />
+              </div>
+              {showEmoji && (
+                <div className="emojipicker">
+                  <EmojiPicker onEmojiClick={handleEmojiSelect} />
+                </div>
+              )}
               <SpeedDial
                 ariaLabel="SpeedDial basic example"
                 sx={{ position: "absolute", bottom: 23, right: 195 }}
