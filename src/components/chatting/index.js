@@ -49,6 +49,7 @@ const Chatting = () => {
   const [blob, setBlob] = useState("");
   const [showAudio, setShowAudio] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
+  const scrollMasg = useRef(null);
 
   const db = getDatabase();
   const storage = getStorage();
@@ -240,6 +241,12 @@ const Chatting = () => {
     });
   };
 
+  // For scroll masg
+
+  useEffect(() => {
+    scrollMasg?.current?.scrollIntoView();
+  }, [singleMasgList]);
+
   return (
     <>
       <div className="chatting-box">
@@ -267,12 +274,41 @@ const Chatting = () => {
         )}
         <div className="message">
           {activeChatname?.status === "single"
-            ? singleMasgList.map((item, i) =>
-                item.whosendId === user.uid ? (
-                  item.masg ? (
-                    <>
+            ? singleMasgList.map((item, i) => (
+                <div ref={scrollMasg}>
+                  {item.whosendId === user.uid ? (
+                    item.masg ? (
+                      <>
+                        <div className="right_masg">
+                          <div className="right_text">
+                            <p>{item.masg}</p>
+                          </div>
+                          <span>
+                            {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                          </span>
+                        </div>
+                      </>
+                    ) : item.img ? (
                       <div className="right_masg">
-                        <div className="right_text">
+                        <div className="right_image">
+                          <ModalImage small={item.img} medium={item.img} />
+                        </div>
+                        <span>
+                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="right_masg">
+                        <audio controls src={item.audio}></audio>
+                        <span>
+                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                        </span>
+                      </div>
+                    )
+                  ) : item.masg ? (
+                    <>
+                      <div className="left_masg">
+                        <div className="left_text">
                           <p>{item.masg}</p>
                         </div>
                         <span>
@@ -281,8 +317,8 @@ const Chatting = () => {
                       </div>
                     </>
                   ) : item.img ? (
-                    <div className="right_masg">
-                      <div className="right_image">
+                    <div className="left_masg">
+                      <div className="left_image">
                         <ModalImage small={item.img} medium={item.img} />
                       </div>
                       <span>
@@ -290,38 +326,13 @@ const Chatting = () => {
                       </span>
                     </div>
                   ) : (
-                    <div className="right_masg">
-                      <audio controls src={item.audio}></audio>
-                      <span>
-                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                      </span>
-                    </div>
-                  )
-                ) : item.masg ? (
-                  <>
                     <div className="left_masg">
-                      <div className="left_text">
-                        <p>{item.masg}</p>
-                      </div>
-                      <span>
-                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                      </span>
+                      <audio controls src={item.audio}></audio>
+                      <span>Today, 3:01pm</span>
                     </div>
-                  </>
-                ) : item.img ? (
-                  <div className="left_masg">
-                    <div className="left_image">
-                      <ModalImage small={item.img} medium={item.img} />
-                    </div>
-                    <span>{moment(item.date, "YYYYMMDD hh:mm").fromNow()}</span>
-                  </div>
-                ) : (
-                  <div className="left_masg">
-                    <audio controls src={item.audio}></audio>
-                    <span>Today, 3:01pm</span>
-                  </div>
-                )
-              )
+                  )}
+                </div>
+              ))
             : "grp masr"}
         </div>
 
