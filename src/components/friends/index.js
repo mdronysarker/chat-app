@@ -77,7 +77,7 @@ const Friend = () => {
     remove(ref(db, "friends/" + data.id));
   };
 
-  //ActiveSingle for
+  //ActiveSingle for friends
 
   const handleActiveSingle = (item) => {
     if (item.reciverid === user.uid) {

@@ -44,6 +44,8 @@ const Chatting = () => {
   const chooseFile = useRef();
   const [sendMasg, setSendMasg] = useState("");
   const [singleMasgList, setSingleMasgList] = useState([]);
+  const [groupMasgList, setGroupMasgList] = useState([]);
+  const [memberList, setMemberList] = useState([]);
   const [captureImage, setCaptureImage] = useState("");
   const [audioUrl, setAudioUrl] = useState("");
   const [blob, setBlob] = useState("");
@@ -112,7 +114,17 @@ const Chatting = () => {
         setSendMasg("");
       });
     } else {
-      console.log("nai");
+      set(push(ref(db, "grpmasg")), {
+        whosendId: user.uid,
+        whosendName: user.displayName,
+        whorecevieId: activeChatname.id,
+        whorecevieName: activeChatname.name,
+        adminId: activeChatname?.adminId,
+        masg: sendMasg,
+        date: `${new Date().getFullYear()} - ${
+          new Date().getMonth() + 1
+        } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+      });
     }
   };
 
@@ -137,6 +149,19 @@ const Chatting = () => {
   }, [db, user.uid, activeChatname?.id]);
 
   // console.log(singleMasgList);
+
+  // Read Group message
+
+  useEffect(() => {
+    const starCountRef = ref(db, "grpmasg");
+    onValue(starCountRef, (snapshot) => {
+      const grpchat = [];
+      snapshot.forEach((item) => {
+        grpchat.push(item.val());
+      });
+      setGroupMasgList(grpchat);
+    });
+  }, [db, user.uid, activeChatname?.id]);
 
   // send file in chat box
   const handleUploadImage = (e) => {
@@ -174,6 +199,21 @@ const Chatting = () => {
       }
     );
   };
+
+  // get grp member
+
+  useEffect(() => {
+    const starCountRef = ref(db, "groupmembers");
+    onValue(starCountRef, (snapshot) => {
+      const userArr = [];
+      snapshot.forEach((userlist) => {
+        userArr.push(userlist.val().groupId + userlist.val().userId);
+      });
+      setMemberList(userArr);
+    });
+  }, [user.uid, db]);
+
+  // console.log(memberList);
 
   // Message will be send with enter
 
@@ -244,7 +284,7 @@ const Chatting = () => {
   // For scroll masg
 
   useEffect(() => {
-    scrollMasg?.current?.scrollIntoView();
+    scrollMasg?.current?.scrollIntoView({ behavior: "smooth" });
   }, [singleMasgList]);
 
   return (
@@ -279,7 +319,7 @@ const Chatting = () => {
                   {item.whosendId === user.uid ? (
                     item.masg ? (
                       <>
-                        <div className="right_masg">
+                        <div className="right_masg" key={i}>
                           <div className="right_text">
                             <p>{item.masg}</p>
                           </div>
@@ -333,7 +373,34 @@ const Chatting = () => {
                   )}
                 </div>
               ))
-            : "grp masr"}
+            : user.uid === activeChatname?.adminId ||
+              memberList.includes(activeChatname?.id + user.uid)
+            ? groupMasgList.map((item, i) => (
+                <div>
+                  {item.whosendId === user.uid
+                    ? item.whorecevieId === activeChatname?.id && (
+                        <div className="right_masg" key={i}>
+                          <div className="right_text">
+                            <p>{item.masg}</p>
+                          </div>
+                          <span>
+                            {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                          </span>
+                        </div>
+                      )
+                    : item.whorecevieId === activeChatname?.id && (
+                        <div className="left_masg">
+                          <div className="left_text">
+                            <p>{item.masg}</p>
+                          </div>
+                          <span>
+                            {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                          </span>
+                        </div>
+                      )}
+                </div>
+              ))
+            : "nai"}
         </div>
 
         <div className="message-inputs">
