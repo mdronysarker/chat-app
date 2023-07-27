@@ -31,6 +31,8 @@ import moment from "moment/moment";
 import { v4 as uuidv4 } from "uuid";
 import { AudioRecorder } from "react-audio-voice-recorder";
 import EmojiPicker from "emoji-picker-react";
+import nomessage from "../../lottie/no-masg.json";
+import Lottie from "lottie-react";
 
 const actions = [
   { icon: <GrGallery />, name: "Gallery" },
@@ -57,7 +59,7 @@ const Chatting = () => {
   const storage = getStorage();
 
   const activeChatname = useSelector((active) => active.active.active);
-  // console.log(activeChatname);
+  // console.log(activeChatname.status, "starus");
 
   const user = useSelector((users) => users.login.loggedIn);
 
@@ -289,106 +291,66 @@ const Chatting = () => {
 
   return (
     <>
-      <div className="chatting-box">
-        <div className="active_user_status">
-          <div className="user_image">
-            <div className="image"></div>
-            <div className="info">
-              <h4>{activeChatname?.name}</h4>
-              <span>Online</span>
+      {activeChatname?.status === "single" ||
+      activeChatname?.status === "Group" ? (
+        <div className="chatting-box">
+          <div className="active_user_status">
+            <div className="user_image">
+              <div className="image"></div>
+              <div className="info">
+                <h4>{activeChatname?.name}</h4>
+                <span>Online</span>
+              </div>
+            </div>
+            <div className="info_bar">
+              <BsThreeDotsVertical />
             </div>
           </div>
-          <div className="info_bar">
-            <BsThreeDotsVertical />
-          </div>
-        </div>
-        {showCamera && (
-          <div className="open-camera">
-            <RxCross2 onClick={() => setShowCamera(false)} />
-            <Camera
-              onTakePhoto={(dataUri) => {
-                handleTakePhoto(dataUri);
-              }}
-            />
-          </div>
-        )}
-        <div className="message">
-          {activeChatname?.status === "single"
-            ? singleMasgList.map((item, i) => (
-                <div ref={scrollMasg}>
-                  {item.whosendId === user.uid ? (
-                    item.masg ? (
-                      <>
-                        <div className="right_masg" key={i}>
-                          <div className="right_text">
-                            <p>{item.masg}</p>
+          {showCamera && (
+            <div className="open-camera">
+              <RxCross2 onClick={() => setShowCamera(false)} />
+              <Camera
+                onTakePhoto={(dataUri) => {
+                  handleTakePhoto(dataUri);
+                }}
+              />
+            </div>
+          )}
+          <div className="message">
+            {activeChatname?.status === "single"
+              ? singleMasgList.map((item, i) => (
+                  <div ref={scrollMasg}>
+                    {item.whosendId === user.uid ? (
+                      item.masg ? (
+                        <>
+                          <div className="right_masg" key={i}>
+                            <div className="right_text">
+                              <p>{item.masg}</p>
+                            </div>
+                            <span>
+                              {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                            </span>
+                          </div>
+                        </>
+                      ) : item.img ? (
+                        <div className="right_masg">
+                          <div className="right_image">
+                            <ModalImage small={item.img} medium={item.img} />
                           </div>
                           <span>
                             {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
                           </span>
                         </div>
-                      </>
-                    ) : item.img ? (
-                      <div className="right_masg">
-                        <div className="right_image">
-                          <ModalImage small={item.img} medium={item.img} />
-                        </div>
-                        <span>
-                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="right_masg">
-                        <audio controls src={item.audio}></audio>
-                        <span>
-                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                        </span>
-                      </div>
-                    )
-                  ) : item.masg ? (
-                    <>
-                      <div className="left_masg">
-                        <div className="left_text">
-                          <p>{item.masg}</p>
-                        </div>
-                        <span>
-                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                        </span>
-                      </div>
-                    </>
-                  ) : item.img ? (
-                    <div className="left_masg">
-                      <div className="left_image">
-                        <ModalImage small={item.img} medium={item.img} />
-                      </div>
-                      <span>
-                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="left_masg">
-                      <audio controls src={item.audio}></audio>
-                      <span>Today, 3:01pm</span>
-                    </div>
-                  )}
-                </div>
-              ))
-            : user.uid === activeChatname?.adminId ||
-              memberList.includes(activeChatname?.id + user.uid)
-            ? groupMasgList.map((item, i) => (
-                <div>
-                  {item.whosendId === user.uid
-                    ? item.whorecevieId === activeChatname?.id && (
-                        <div className="right_masg" key={i}>
-                          <div className="right_text">
-                            <p>{item.masg}</p>
-                          </div>
+                      ) : (
+                        <div className="right_masg">
+                          <audio controls src={item.audio}></audio>
                           <span>
                             {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
                           </span>
                         </div>
                       )
-                    : item.whorecevieId === activeChatname?.id && (
+                    ) : item.masg ? (
+                      <>
                         <div className="left_masg">
                           <div className="left_text">
                             <p>{item.masg}</p>
@@ -397,91 +359,238 @@ const Chatting = () => {
                             {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
                           </span>
                         </div>
-                      )}
-                </div>
-              ))
-            : "nai"}
-        </div>
+                      </>
+                    ) : item.img ? (
+                      <div className="left_masg">
+                        <div className="left_image">
+                          <ModalImage small={item.img} medium={item.img} />
+                        </div>
+                        <span>
+                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="left_masg">
+                        <audio controls src={item.audio}></audio>
+                        <span>Today, 3:01pm</span>
+                      </div>
+                    )}
+                  </div>
+                ))
+              : user.uid === activeChatname?.adminId ||
+                memberList.includes(activeChatname?.id + user.uid)
+              ? groupMasgList.map((item, i) => (
+                  <div>
+                    {item.whosendId === user.uid
+                      ? item.whorecevieId === activeChatname?.id && (
+                          <div className="right_masg" key={i}>
+                            <div className="right_text">
+                              <p>{item.masg}</p>
+                            </div>
+                            <span>
+                              {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                            </span>
+                          </div>
+                        )
+                      : item.whorecevieId === activeChatname?.id && (
+                          <div className="left_masg">
+                            <div className="left_text">
+                              <p>{item.masg}</p>
+                            </div>
+                            <span>
+                              {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                            </span>
+                          </div>
+                        )}
+                  </div>
+                ))
+              : "nai"}
+          </div>
 
-        <div className="message-inputs">
-          {!showAudio && !audioUrl && (
-            <div className="text-inputs">
-              <input
-                type="text"
-                onKeyUp={handleEnterPress}
-                value={sendMasg}
-                onChange={(e) => setSendMasg(e.target.value)}
-              />
+          {activeChatname?.status === "single" ? (
+            <div>
+              <div className="message-inputs">
+                {!showAudio && !audioUrl && (
+                  <div className="text-inputs">
+                    <input
+                      type="text"
+                      onKeyUp={handleEnterPress}
+                      value={sendMasg}
+                      onChange={(e) => setSendMasg(e.target.value)}
+                    />
 
-              <div className="emoji" onClick={() => setShowEmoji(!showEmoji)}>
-                <BsEmojiSmile />
+                    <div
+                      className="emoji"
+                      onClick={() => setShowEmoji(!showEmoji)}
+                    >
+                      <BsEmojiSmile />
+                    </div>
+                    {showEmoji && (
+                      <div className="emojipicker">
+                        <EmojiPicker onEmojiClick={handleEmojiSelect} />
+                      </div>
+                    )}
+                    <SpeedDial
+                      ariaLabel="SpeedDial basic example"
+                      sx={{ position: "absolute", bottom: 23, right: 195 }}
+                      icon={<SpeedDialIcon />}
+                    >
+                      {actions.map((action) => (
+                        <SpeedDialAction
+                          key={action.name}
+                          icon={action.icon}
+                          onClick={() => showMorefundamantal(action.name)}
+                          tooltipTitle={action.name}
+                        />
+                      ))}
+                    </SpeedDial>
+                  </div>
+                )}
+                <input
+                  hidden
+                  type="file"
+                  ref={chooseFile}
+                  onChange={handleUploadImage}
+                />
+                {!showAudio && !audioUrl && (
+                  <button
+                    className="telegram"
+                    type="submit"
+                    onClick={handleSubmit}
+                  >
+                    <FaTelegram />
+                  </button>
+                )}
               </div>
-              {showEmoji && (
-                <div className="emojipicker">
-                  <EmojiPicker onEmojiClick={handleEmojiSelect} />
+
+              <div onClick={() => setShowAudio(!showAudio)}>
+                <AudioRecorder
+                  onRecordingComplete={(blob) => addAudioElement(blob)}
+                  audioTrackConstraints={{
+                    noiseSuppression: true,
+                    echoCancellation: true,
+                  }}
+                  downloadOnSavePress={true}
+                  downloadFileExtension="mp3"
+                />
+              </div>
+              {audioUrl && (
+                <div className="audio-sound">
+                  <audio controls src={audioUrl}></audio>
+
+                  <div
+                    className="voice-button"
+                    variant="contained"
+                    onClick={handleAudioUpload}
+                  >
+                    <SendIcon />
+                  </div>
+                  <div
+                    className="voice-button"
+                    variant="contained"
+                    onClick={() => setAudioUrl("")}
+                  >
+                    <DeleteIcon />
+                  </div>
                 </div>
               )}
-              <SpeedDial
-                ariaLabel="SpeedDial basic example"
-                sx={{ position: "absolute", bottom: 23, right: 195 }}
-                icon={<SpeedDialIcon />}
-              >
-                {actions.map((action) => (
-                  <SpeedDialAction
-                    key={action.name}
-                    icon={action.icon}
-                    onClick={() => showMorefundamantal(action.name)}
-                    tooltipTitle={action.name}
-                  />
-                ))}
-              </SpeedDial>
             </div>
-          )}
-          <input
-            hidden
-            type="file"
-            ref={chooseFile}
-            onChange={handleUploadImage}
-          />
-          {!showAudio && !audioUrl && (
-            <button className="telegram" type="submit" onClick={handleSubmit}>
-              <FaTelegram />
-            </button>
+          ) : user.uid === activeChatname?.adminId ||
+            memberList.includes(activeChatname?.id + user.uid) ? (
+            <div>
+              <div className="message-inputs">
+                {!showAudio && !audioUrl && (
+                  <div className="text-inputs">
+                    <input
+                      type="text"
+                      onKeyUp={handleEnterPress}
+                      value={sendMasg}
+                      onChange={(e) => setSendMasg(e.target.value)}
+                    />
+
+                    <div
+                      className="emoji"
+                      onClick={() => setShowEmoji(!showEmoji)}
+                    >
+                      <BsEmojiSmile />
+                    </div>
+                    {showEmoji && (
+                      <div className="emojipicker">
+                        <EmojiPicker onEmojiClick={handleEmojiSelect} />
+                      </div>
+                    )}
+                    <SpeedDial
+                      ariaLabel="SpeedDial basic example"
+                      sx={{ position: "absolute", bottom: 23, right: 195 }}
+                      icon={<SpeedDialIcon />}
+                    >
+                      {actions.map((action) => (
+                        <SpeedDialAction
+                          key={action.name}
+                          icon={action.icon}
+                          onClick={() => showMorefundamantal(action.name)}
+                          tooltipTitle={action.name}
+                        />
+                      ))}
+                    </SpeedDial>
+                  </div>
+                )}
+                <input
+                  hidden
+                  type="file"
+                  ref={chooseFile}
+                  onChange={handleUploadImage}
+                />
+                {!showAudio && !audioUrl && (
+                  <button
+                    className="telegram"
+                    type="submit"
+                    onClick={handleSubmit}
+                  >
+                    <FaTelegram />
+                  </button>
+                )}
+              </div>
+
+              <div onClick={() => setShowAudio(!showAudio)}>
+                <AudioRecorder
+                  onRecordingComplete={(blob) => addAudioElement(blob)}
+                  audioTrackConstraints={{
+                    noiseSuppression: true,
+                    echoCancellation: true,
+                  }}
+                  downloadOnSavePress={true}
+                  downloadFileExtension="mp3"
+                />
+              </div>
+              {audioUrl && (
+                <div className="audio-sound">
+                  <audio controls src={audioUrl}></audio>
+
+                  <div
+                    className="voice-button"
+                    variant="contained"
+                    onClick={handleAudioUpload}
+                  >
+                    <SendIcon />
+                  </div>
+                  <div
+                    className="voice-button"
+                    variant="contained"
+                    onClick={() => setAudioUrl("")}
+                  >
+                    <DeleteIcon />
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            ""
           )}
         </div>
-
-        <div onClick={() => setShowAudio(!showAudio)}>
-          <AudioRecorder
-            onRecordingComplete={(blob) => addAudioElement(blob)}
-            audioTrackConstraints={{
-              noiseSuppression: true,
-              echoCancellation: true,
-            }}
-            downloadOnSavePress={true}
-            downloadFileExtension="mp3"
-          />
-        </div>
-        {audioUrl && (
-          <div className="audio-sound">
-            <audio controls src={audioUrl}></audio>
-
-            <div
-              className="voice-button"
-              variant="contained"
-              onClick={handleAudioUpload}
-            >
-              <SendIcon />
-            </div>
-            <div
-              className="voice-button"
-              variant="contained"
-              onClick={() => setAudioUrl("")}
-            >
-              <DeleteIcon />
-            </div>
-          </div>
-        )}
-      </div>
+      ) : (
+        <Lottie animationData={nomessage} loop={true} />
+      )}
     </>
   );
 };
