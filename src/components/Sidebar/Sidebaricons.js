@@ -18,7 +18,7 @@ const Sidebaricons = () => {
         <NavLink className="sidebar_icon" to={"/notification"}>
           <IoMdNotificationsOutline />
         </NavLink>
-        <NavLink className="sidebar_icon" to={"/text"}>
+        <NavLink className="sidebar_icon" to={"/accountinfo"}>
           <AiOutlineSetting />
         </NavLink>
       </div>

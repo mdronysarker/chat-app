@@ -45,6 +45,7 @@ const Chatting = () => {
   const [showCamera, setShowCamera] = useState(false);
   const chooseFile = useRef();
   const [sendMasg, setSendMasg] = useState("");
+  const [sendGrpMasg, setSendGrpMasg] = useState("");
   const [singleMasgList, setSingleMasgList] = useState([]);
   const [groupMasgList, setGroupMasgList] = useState([]);
   const [memberList, setMemberList] = useState([]);
@@ -281,6 +282,9 @@ const Chatting = () => {
     setSendMasg(sendMasg + emoji.emoji).then(() => {
       setShowEmoji(false);
     });
+    setSendGrpMasg(sendGrpMasg + emoji.emoji).then(() => {
+      setShowEmoji(false);
+    });
   };
 
   // For scroll masg
@@ -504,8 +508,8 @@ const Chatting = () => {
                     <input
                       type="text"
                       onKeyUp={handleEnterPress}
-                      value={sendMasg}
-                      onChange={(e) => setSendMasg(e.target.value)}
+                      value={sendGrpMasg}
+                      onChange={(e) => setSendGrpMasg(e.target.value)}
                     />
 
                     <div
