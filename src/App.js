@@ -22,6 +22,7 @@ function App() {
           <Route element={<Rootlayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/message" element={<Message />} />
+            <Route path="/notification"></Route>
             <Route path="/accountinfo" element={<Accountinfo />} />
           </Route>
         </Route>
