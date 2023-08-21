@@ -68,6 +68,7 @@ const Userlists = () => {
       reciverPicture: item.profilePicture || "./images/profile-pic.jpg",
     }).then(() => {
       set(push(ref(db, "notification")), {
+        Id: item.id,
         notification: `${user.displayName} is friend request you`,
       });
     });
