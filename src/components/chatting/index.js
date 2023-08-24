@@ -123,7 +123,7 @@ const Chatting = () => {
         whorecevieId: activeChatname.id,
         whorecevieName: activeChatname.name,
         adminId: activeChatname?.adminId,
-        masg: sendMasg,
+        masg: sendGrpMasg,
         date: `${new Date().getFullYear()} - ${
           new Date().getMonth() + 1
         } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
@@ -188,16 +188,29 @@ const Chatting = () => {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          set(push(ref(db, "singlemasg")), {
-            whosendId: user.uid,
-            whosendName: user.displayName,
-            whorecevieId: activeChatname.id,
-            whorecevieName: activeChatname.name,
-            img: downloadURL,
-            date: `${new Date().getFullYear()} - ${
-              new Date().getMonth() + 1
-            } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
-          });
+          if (activeChatname?.status === "single") {
+            set(push(ref(db, "singlemasg")), {
+              whosendId: user.uid,
+              whosendName: user.displayName,
+              whorecevieId: activeChatname.id,
+              whorecevieName: activeChatname.name,
+              img: downloadURL,
+              date: `${new Date().getFullYear()} - ${
+                new Date().getMonth() + 1
+              } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+            });
+          } else {
+            set(push(ref(db, "grpmasg")), {
+              whosendId: user.uid,
+              whosendName: user.displayName,
+              whorecevieId: activeChatname.id,
+              whorecevieName: activeChatname.name,
+              img: downloadURL,
+              date: `${new Date().getFullYear()} - ${
+                new Date().getMonth() + 1
+              } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+            });
+          }
         });
       }
     );
@@ -237,7 +250,19 @@ const Chatting = () => {
           setSendMasg("");
         });
       } else {
-        console.log("nai");
+        set(push(ref(db, "grpmasg")), {
+          whosendId: user.uid,
+          whosendName: user.displayName,
+          whorecevieId: activeChatname.id,
+          whorecevieName: activeChatname.name,
+          masg: sendGrpMasg,
+          date: `${new Date().getFullYear()} - ${
+            new Date().getMonth() + 1
+          } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+        }).then(() => {
+          // console.log("rony hiii");
+          setSendGrpMasg("");
+        });
       }
     }
   };
@@ -260,18 +285,33 @@ const Chatting = () => {
     // 'file' comes from the Blob or File API
     uploadBytes(audioStorageRef, blob).then((snapshot) => {
       getDownloadURL(audioStorageRef).then((downloadURL) => {
-        set(push(ref(db, "singlemasg")), {
-          whosendId: user.uid,
-          whosendName: user.displayName,
-          whorecevieId: activeChatname.id,
-          whorecevieName: activeChatname.name,
-          audio: downloadURL,
-          date: `${new Date().getFullYear()} - ${
-            new Date().getMonth() + 1
-          } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
-        }).then(() => {
-          setAudioUrl("");
-        });
+        if (activeChatname?.status === "single") {
+          set(push(ref(db, "singlemasg")), {
+            whosendId: user.uid,
+            whosendName: user.displayName,
+            whorecevieId: activeChatname.id,
+            whorecevieName: activeChatname.name,
+            audio: downloadURL,
+            date: `${new Date().getFullYear()} - ${
+              new Date().getMonth() + 1
+            } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+          }).then(() => {
+            setAudioUrl("");
+          });
+        } else {
+          set(push(ref(db, "grpmasg")), {
+            whosendId: user.uid,
+            whosendName: user.displayName,
+            whorecevieId: activeChatname.id,
+            whorecevieName: activeChatname.name,
+            audio: downloadURL,
+            date: `${new Date().getFullYear()} - ${
+              new Date().getMonth() + 1
+            } - ${new Date().getDate()}  ${new Date().getHours()}:${new Date().getMinutes()}`,
+          }).then(() => {
+            setAudioUrl("");
+          });
+        }
       });
     });
   };
@@ -386,17 +426,36 @@ const Chatting = () => {
               ? groupMasgList.map((item, i) => (
                   <div>
                     {item.whosendId === user.uid
-                      ? item.whorecevieId === activeChatname?.id && (
-                          <div className="right_masg" key={i}>
-                            <div className="right_text">
-                              <p>{item.masg}</p>
+                      ? item.whorecevieId === activeChatname?.id ??
+                        (item.masg ? (
+                          <>
+                            <div className="right_masg" key={i}>
+                              <div className="right_text">
+                                <p>{item.masg}</p>
+                              </div>
+                              <span>
+                                {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                              </span>
+                            </div>
+                          </>
+                        ) : item.img ? (
+                          <div className="right_masg">
+                            <div className="right_image">
+                              <ModalImage small={item.img} medium={item.img} />
                             </div>
                             <span>
                               {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
                             </span>
                           </div>
-                        )
-                      : item.whorecevieId === activeChatname?.id && (
+                        ) : (
+                          <div className="right_masg">
+                            <audio controls src={item.audio}></audio>
+                            <span>
+                              {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                            </span>
+                          </div>
+                        ))
+                      : item.whorecevieId === activeChatname?.id ?? (
                           <div className="left_masg">
                             <div className="left_text">
                               <p>{item.masg}</p>

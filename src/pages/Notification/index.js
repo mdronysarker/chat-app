@@ -23,7 +23,7 @@ export const Notification = () => {
     });
   }, [db, user.uid]);
 
-  console.log(notification);
+  // console.log(notification);
 
   return (
     <>
